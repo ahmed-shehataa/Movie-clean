@@ -3,7 +3,6 @@ package com.ashehata.movieclean
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import com.reloaded.cat.util.Logger
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

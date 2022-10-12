@@ -1,27 +1,20 @@
-buildscript {
-    ext.kotlinVersion = '1.7.20'
-    ext.navigationVersion = '2.5.2'
-
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
+plugins {
+    id 'com.android.application' version '7.2.2' apply false
+    id 'com.android.library' version '7.2.2' apply false
+    id 'org.jetbrains.kotlin.android' version '1.7.20' apply false
+    id "org.jetbrains.kotlin.kapt" version "1.5.31"
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
+
+task testAllApplication(dependsOn: ['app:test', 'app:connectedAndroidTest']) {
+    group = 'custom_tasks'
+    description = "Run all tests (Local unit test, Instrumented unit test)"
+}
+
 
 enum ReleaseType {
     ALPHA,
@@ -45,6 +38,7 @@ ext {
     compileSdkVersion = 33
 
     // App dependencies
+    navigationVersion = '2.5.2'
     compose_ui_version = '1.2.1'
     androidXVersion = '1.0.0'
     androidXTestCoreVersion = '1.4.0'
@@ -77,4 +71,7 @@ ext {
     activityCompose = "1.6.0"
     room_version = "2.4.3"
     coScope = "2.5.1"
+    swipe = "0.26.5-rc"
+    coil = "2.2.2"
+    accVersion = "0.17.0"
 }

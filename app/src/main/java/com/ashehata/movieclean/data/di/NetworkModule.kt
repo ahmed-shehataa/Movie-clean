@@ -1,9 +1,14 @@
 package com.ashehata.movieclean.data.di
 
 import com.ashehata.movieclean.App
+import com.ashehata.movieclean.BASE_URL
 import com.ashehata.movieclean.BuildConfig
+import com.ashehata.movieclean.data.local.LocalData
 import com.ashehata.movieclean.data.remote.RemoteData
-import com.reloaded.cat.util.BASE_URL
+import com.ashehata.movieclean.data.repo.MoviesRepositoryImpl
+import com.ashehata.movieclean.domain.repo.MoviesRepository
+import com.ashehata.movieclean.domain.useCase.MovieUseCase
+import com.ashehata.movieclean.domain.useCase.MoviesUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +34,8 @@ class NetworkModule {
     @Singleton
     fun getOkHttpClient(): OkHttpClient {
         val logging = HttpLoggingInterceptor()
-        logging.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+        logging.level =
+            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         val okHttpClient = OkHttpClient.Builder()
         okHttpClient.apply {
             retryOnConnectionFailure(true)
@@ -65,6 +71,23 @@ class NetworkModule {
         return retrofit.create(RemoteData::class.java)
     }
 
+
+    @Provides
+    @Singleton
+    fun bindMoviesRepo(
+        localData: LocalData,
+        remoteData: RemoteData
+    ): MoviesRepository {
+        return MoviesRepositoryImpl(localData, remoteData)
+    }
+
+    @Provides
+    @Singleton
+    fun bindMoviesUseCase(
+        moviesRepository: MoviesRepository
+    ): MovieUseCase {
+        return MoviesUseCaseImpl(moviesRepository)
+    }
 
 
 }

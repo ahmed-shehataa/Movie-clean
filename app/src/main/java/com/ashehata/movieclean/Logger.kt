@@ -1,7 +1,6 @@
-package com.reloaded.cat.util
+package com.ashehata.movieclean
 
 import android.util.Log
-import com.reloaded.cat.BuildConfig
 
 /**
  * How to use it?

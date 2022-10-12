@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Movie clean</string>
+    <string name="movie_app_name">Movies</string>
 </resources>

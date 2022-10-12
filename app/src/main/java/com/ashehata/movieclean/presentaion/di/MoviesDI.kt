@@ -16,15 +16,15 @@ import dagger.hilt.android.components.ActivityComponent
 abstract class MoviesDI {
 
 
-    @Binds
+   /* @Binds
     abstract fun bindMoviesRepo(
         moviesRepositoryImpl: MoviesRepositoryImpl
-    ): MoviesRepository
+    ): MoviesRepository*/
 
-    @Binds
+    /*@Binds
     abstract fun bindMoviesUseCase(
         moviesUseCaseImpl: MoviesUseCaseImpl
-    ): MovieUseCase
+    ): MovieUseCase*/
 
 
 

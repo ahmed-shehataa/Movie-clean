@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'com.google.dagger.hilt.android' version '2.44' apply false
+    id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs'
 }
 
@@ -61,6 +61,11 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    implementation "com.google.accompanist:accompanist-swiperefresh:$swipe"
+    implementation "io.coil-kt:coil-compose:$coil"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accVersion"
+
+
 
     // Architecture Components
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
