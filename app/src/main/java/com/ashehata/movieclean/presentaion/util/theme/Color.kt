@@ -1,4 +1,4 @@
-package com.ashehata.movieclean.ui.theme
+package com.ashehata.movieclean.presentaion.util.theme
 
 import androidx.compose.ui.graphics.Color
 

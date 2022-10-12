@@ -76,4 +76,5 @@ ext {
     lifecycleRuntime = "2.5.1"
     activityCompose = "1.6.0"
     room_version = "2.4.3"
+    coScope = "2.5.1"
 }

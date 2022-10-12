@@ -70,6 +70,9 @@ dependencies {
     implementation "androidx.core:core-splashscreen:$splash_screen"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleRuntime"
     implementation "androidx.activity:activity-compose:$activityCompose"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$coScope"
+    implementation "androidx.room:room-ktx:$room_version"
+    //implementation "androidx.lifecycle:lifecycle-runtime-ktx$coScope"
 
     // External libs
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
