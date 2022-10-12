@@ -74,4 +74,5 @@ ext {
     swipe = "0.26.5-rc"
     coil = "2.2.2"
     accVersion = "0.17.0"
+    pagingCompose = "1.0.0-alpha16"
 }

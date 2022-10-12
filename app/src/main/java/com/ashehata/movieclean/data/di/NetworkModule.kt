@@ -1,5 +1,6 @@
 package com.ashehata.movieclean.data.di
 
+import com.ashehata.movieclean.API_KEY
 import com.ashehata.movieclean.App
 import com.ashehata.movieclean.BASE_URL
 import com.ashehata.movieclean.BuildConfig
@@ -42,6 +43,13 @@ class NetworkModule {
             readTimeout(1, TimeUnit.MINUTES)
             connectTimeout(1, TimeUnit.MINUTES)
             writeTimeout(5, TimeUnit.MINUTES)
+            addInterceptor { chain ->
+                val original = chain.request()
+                val http = original.url
+                    .newBuilder().addQueryParameter("api_key", API_KEY).build()
+                val newRequest = original.newBuilder().url(http).build()
+                return@addInterceptor chain.proceed(newRequest)
+            }
             addInterceptor(logging)
         }.build()
         return okHttpClient.build()

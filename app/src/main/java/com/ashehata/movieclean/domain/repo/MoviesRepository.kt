@@ -1,8 +1,11 @@
 package com.ashehata.movieclean.domain.repo
 
-import com.ashehata.movieclean.domain.models.Movie
+import androidx.paging.Pager
+import com.ashehata.movieclean.data.models.MoviesPopularResponse
 
 interface MoviesRepository {
 
-    suspend fun getMovies(): List<Movie>
+    suspend fun getPopularMovies(): Pager<Int, MoviesPopularResponse.Movie>
+
+    suspend fun getTopRatedMovies(): Pager<Int, MoviesPopularResponse.Movie>
 }

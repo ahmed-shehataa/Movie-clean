@@ -1,6 +1,11 @@
 package com.ashehata.movieclean.data.repo
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.ashehata.movieclean.data.local.LocalData
+import com.ashehata.movieclean.data.models.MoviesPopularResponse
+import com.ashehata.movieclean.data.remote.MoviesPagingSource
+import com.ashehata.movieclean.data.remote.PAGE_SIZE_PAGING_EXPLORE
 import com.ashehata.movieclean.data.remote.RemoteData
 import com.ashehata.movieclean.domain.models.Movie
 import com.ashehata.movieclean.domain.repo.MoviesRepository
@@ -16,11 +21,24 @@ class MoviesRepositoryImpl @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MoviesRepository {
 
-    override suspend fun getMovies(): List<Movie> = withContext(dispatcher) {
-        listOf(
-            Movie("ahmed"),
-            Movie("momo")
-        )
+
+    override suspend fun getPopularMovies(): Pager<Int, MoviesPopularResponse.Movie> = withContext(dispatcher) {
+        // get from API
+        return@withContext Pager(config = PagingConfig(
+            pageSize = PAGE_SIZE_PAGING_EXPLORE,
+            enablePlaceholders = false
+        ), pagingSourceFactory = {
+            MoviesPagingSource(remoteData)
+        })
+    }
+
+    override suspend fun getTopRatedMovies(): Pager<Int, MoviesPopularResponse.Movie> = withContext(dispatcher) {
+        return@withContext Pager(config = PagingConfig(
+            pageSize = PAGE_SIZE_PAGING_EXPLORE,
+            enablePlaceholders = false
+        ), pagingSourceFactory = {
+            MoviesPagingSource(remoteData)
+        })
     }
 
 }

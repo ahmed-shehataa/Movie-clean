@@ -1,7 +1,10 @@
 package com.ashehata.movieclean.presentaion.ui
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -17,20 +20,27 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.ashehata.movieclean.R
+import com.ashehata.movieclean.domain.models.Movie
+import com.ashehata.movieclean.presentaion.util.ToRateColor
+import com.ashehata.movieclean.presentaion.util.compose.items
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun MoviesScreen() {
+fun MoviesScreen(moviesFlow: Flow<PagingData<Movie>>) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(scaffoldState = scaffoldState,
         topBar = {
@@ -38,12 +48,16 @@ fun MoviesScreen() {
 
             })
         }, content = {
-            MoviesContent(scaffoldState, it)
+            MoviesContent(scaffoldState, it, moviesFlow)
         })
 }
 
 @Composable
-fun MoviesContent(scaffoldState: ScaffoldState, it: PaddingValues) {
+fun MoviesContent(
+    scaffoldState: ScaffoldState,
+    it: PaddingValues,
+    moviesFlow: Flow<PagingData<Movie>>
+) {
     SwipeRefresh(
         state = rememberSwipeRefreshState(false),
         onRefresh = {
@@ -56,7 +70,7 @@ fun MoviesContent(scaffoldState: ScaffoldState, it: PaddingValues) {
                 fontSize = 20.sp,
                 color = MaterialTheme.colors.primary
             )
-            MoviesList(scaffoldState, it)
+            MoviesList(scaffoldState, it, moviesFlow)
         }
     }
 }
@@ -84,13 +98,20 @@ fun TopBar(onFilterClicked: () -> Unit = {}) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MoviesList(scaffoldState: ScaffoldState, paddingValues: PaddingValues) {
+fun MoviesList(
+    scaffoldState: ScaffoldState,
+    paddingValues: PaddingValues,
+    moviesFlow: Flow<PagingData<Movie>>
+) {
     Box(
         Modifier
             .fillMaxWidth()
             .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 4.dp)
     ) {
+
+        val moviesItems = moviesFlow.collectAsLazyPagingItems()
 
         LazyVerticalGrid(
             columns = GridCells.Adaptive(100.dp),
@@ -101,12 +122,8 @@ fun MoviesList(scaffoldState: ScaffoldState, paddingValues: PaddingValues) {
                 bottom = 8.dp
             ),
         ) {
-
-            (1..15).forEach { _ ->
-                item {
-                    MovieItem()
-                    Spacer(modifier = Modifier.height(4.dp))
-                }
+            items(moviesItems) { movie ->
+                MovieItem(movie)
             }
 
         }
@@ -114,29 +131,61 @@ fun MoviesList(scaffoldState: ScaffoldState, paddingValues: PaddingValues) {
 }
 
 @Composable
-fun MovieItem() {
-    Column(
-        Modifier
-            .padding(12.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .clickable {
-            }
-            .background(MaterialTheme.colors.secondary)
-            .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+fun MovieItem(movie: Movie?) {
+    movie?.let {
+        Column(
+            Modifier
+                .padding(12.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .clickable {
+                }
+                .background(MaterialTheme.colors.secondary)
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            MovieImageRate(movie)
+            Text(
+                text = movie.name,
+                fontSize = 18.sp,
+                color = Color.White,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Composable
+fun MovieImageRate(movie: Movie) {
+    Box {
+        MovieImage(movie.imageUrl)
+        MovieRateBadge(movie.voteAverage, Modifier.align(Alignment.TopEnd))
+    }
+}
+
+@Composable
+fun MovieRateBadge(voteAverage: Double, Modifier: Modifier) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(50))
+            .background(voteAverage.ToRateColor())
+
     ) {
-        MovieImage()
         Text(
-            text = "Title",
-            fontSize = 18.sp,
-            color = Color.White
+            modifier = Modifier
+                .padding(4.dp),
+            text = voteAverage.toString(),
+            fontSize = 16.sp,
+            color = Color.White,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
 
 @Composable
-fun MovieImage() {
+fun MovieImage(imageUrl: String) {
     Card(
         modifier = Modifier
             .size(70.dp)
@@ -155,7 +204,7 @@ fun MovieImage() {
             modifier = Modifier
                 .padding(2.dp)
                 .clip(CircleShape),
-            "imageUrl"
+            imageUrl
         )
     }
 }

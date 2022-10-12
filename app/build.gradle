@@ -64,7 +64,8 @@ dependencies {
     implementation "com.google.accompanist:accompanist-swiperefresh:$swipe"
     implementation "io.coil-kt:coil-compose:$coil"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accVersion"
-
+    // Paging Compose
+    implementation "androidx.paging:paging-compose:$pagingCompose"
 
 
     // Architecture Components
