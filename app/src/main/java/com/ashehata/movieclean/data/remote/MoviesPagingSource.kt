@@ -3,29 +3,25 @@ package com.ashehata.movieclean.data.remote
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ashehata.movieclean.Logger
-import com.ashehata.movieclean.data.mappers.toMovie
-import com.ashehata.movieclean.data.models.MoviesPopularResponse
-import com.ashehata.movieclean.domain.models.Movie
+import com.ashehata.movieclean.data.models.MoviesRemoteResponse
 
 const val INITIAL_PAGE = 1
 const val PAGE_SIZE_PAGING_EXPLORE = 10
 const val TAG = "MoviesPagingSource"
 
+
 class MoviesPagingSource(
-    private val remoteData: RemoteData,
-    private val firstPage: Int = INITIAL_PAGE
-) : PagingSource<Int, MoviesPopularResponse.Movie>() {
+    private val methodCall : suspend (Int) -> MoviesRemoteResponse,
+    private val firstPage: Int = INITIAL_PAGE,
+) : PagingSource<Int, MoviesRemoteResponse.Movie>() {
 
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MoviesPopularResponse.Movie> {
+    override suspend fun load(params: LoadParams<Int>): PagingSource.LoadResult<Int, MoviesRemoteResponse.Movie> {
         return try {
             val currentPage = params.key ?: firstPage
 
             Logger.i(TAG, "current_movie_page:: $currentPage")
-            val moviesList =
-                remoteData.getPopularMovies(page = currentPage)
-                    .movies ?: emptyList()
-
+            val moviesList = methodCall.invoke(currentPage).movies ?: emptyList()
 
             Logger.i(TAG, "moviesList:: " + moviesList.size.toString())
 
@@ -42,7 +38,7 @@ class MoviesPagingSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, MoviesPopularResponse.Movie>): Int {
+    override fun getRefreshKey(state: PagingState<Int, MoviesRemoteResponse.Movie>): Int {
         return 0
     }
 

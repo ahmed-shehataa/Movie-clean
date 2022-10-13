@@ -2,33 +2,45 @@ package com.ashehata.movieclean.presentaion.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.ashehata.movieclean.domain.models.Movie
 import com.ashehata.movieclean.domain.useCase.MovieUseCase
+import com.ashehata.movieclean.presentaion.models.MoviesType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MoviesViewModel @Inject constructor(private val movieUseCase: MovieUseCase) : ViewModel(){
+class MoviesViewModel @Inject constructor(private val movieUseCase: MovieUseCase) : ViewModel() {
 
     private val _moviesFlow = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
-    val moviesList : StateFlow<PagingData<Movie>> = _moviesFlow
+    val moviesList: StateFlow<PagingData<Movie>> = _moviesFlow
+
+    val moviesType: Channel<MoviesType> = Channel(capacity = Channel.UNLIMITED)
+
 
     init {
-        getMovies()
+        viewModelScope.launch {
+            moviesType.consumeAsFlow()
+                .distinctUntilChanged()
+                .collectLatest { movieType ->
+                    getMovies(movieType)
+                }
+        }
     }
 
-    fun getMovies() {
+    private fun getMovies(movieType: MoviesType) {
+        // Get the Movies if there are no movies in the flow
         viewModelScope.launch {
-            val moviesResult = movieUseCase.getMostPopularMovies().cachedIn(viewModelScope)
+            val moviesResult = when (movieType) {
+                MoviesType.TOP_RATED -> movieUseCase.getTopRatedMovies()
+                MoviesType.POPULAR -> movieUseCase.getMostPopularMovies()
+            }.cachedIn(viewModelScope)
+
             _moviesFlow.emit(moviesResult.first())
         }
-
     }
 }

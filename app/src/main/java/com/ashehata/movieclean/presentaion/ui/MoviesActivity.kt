@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
+import com.ashehata.movieclean.presentaion.models.MoviesType
 import com.ashehata.movieclean.presentaion.util.theme.MovieCleanTheme
 import com.ashehata.movieclean.presentaion.viewModel.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,21 +24,27 @@ class MoviesActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        requestMovies(MoviesType.POPULAR)
         setContent {
             MovieCleanTheme {
                 StatusBarColor()
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     val moviesFlow = moviesViewModel.moviesList
-                    MoviesScreen(moviesFlow)
+                    MoviesScreen(moviesFlow, onFilterClicked = { type ->
+                        requestMovies(type)
+                    })
                 }
             }
         }
     }
 
+    private fun requestMovies(type: MoviesType) {
+        lifecycleScope.launchWhenCreated {
+            moviesViewModel.moviesType.send(type)
+        }
+    }
 
 }
 

@@ -1,12 +1,12 @@
 package com.ashehata.movieclean.data.mappers
 
 import com.ashehata.movieclean.data.models.MovieLocal
-import com.ashehata.movieclean.data.models.MoviesPopularResponse
+import com.ashehata.movieclean.data.models.MoviesRemoteResponse
 import com.ashehata.movieclean.data.util.toRealPath
 import com.ashehata.movieclean.domain.models.Movie
 
 
-fun MoviesPopularResponse.Movie.toMovie(): Movie {
+fun MoviesRemoteResponse.Movie.toMovie(): Movie {
     return Movie(
         id = this.id ?: -1,
         name = this.title ?: "",

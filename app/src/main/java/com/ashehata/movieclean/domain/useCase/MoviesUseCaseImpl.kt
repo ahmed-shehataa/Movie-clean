@@ -24,7 +24,7 @@ class MoviesUseCaseImpl @Inject constructor(private val moviesRepository: Movies
     }
 
     override suspend fun getMostPopularMovies(): Flow<PagingData<Movie>> {
-        return moviesRepository.getTopRatedMovies().flow.map { moviesList ->
+        return moviesRepository.getPopularMovies().flow.map { moviesList ->
             moviesList.map { movie ->
                 movie.toMovie()
             }

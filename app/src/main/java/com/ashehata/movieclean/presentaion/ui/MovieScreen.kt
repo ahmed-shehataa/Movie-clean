@@ -1,7 +1,6 @@
 package com.ashehata.movieclean.presentaion.ui
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,7 +10,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +34,7 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.ashehata.movieclean.R
 import com.ashehata.movieclean.domain.models.Movie
+import com.ashehata.movieclean.presentaion.models.MoviesType
 import com.ashehata.movieclean.presentaion.util.ToRateColor
 import com.ashehata.movieclean.presentaion.util.compose.items
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -40,13 +43,15 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun MoviesScreen(moviesFlow: Flow<PagingData<Movie>>) {
+fun MoviesScreen(
+    moviesFlow: Flow<PagingData<Movie>>,
+    onFilterClicked: (MoviesType) -> Unit = {},
+    onMovieClicked: (Movie) -> Unit = {},
+) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(scaffoldState = scaffoldState,
         topBar = {
-            TopBar(onFilterClicked = {
-
-            })
+            TopBar(onFilterClicked)
         }, content = {
             MoviesContent(scaffoldState, it, moviesFlow)
         })
@@ -77,28 +82,54 @@ fun MoviesContent(
 
 @Preview(showBackground = true)
 @Composable
-fun TopBar(onFilterClicked: () -> Unit = {}) {
-    TopAppBar {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
+fun TopBar(onFilterItemClicked: (MoviesType) -> Unit = {}) {
+    var mDisplayMenu by remember { mutableStateOf(false) }
+    val mContext = LocalContext.current
+    TopAppBar(title = {
+        Title()
+    }, actions = {
+        DotsIcon(onFilterClicked = {
+            mDisplayMenu = !mDisplayMenu
+        })
+        // Creating a dropdown menu
+        DropdownMenu(
+            expanded = mDisplayMenu,
+            onDismissRequest = { mDisplayMenu = false }
         ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = stringResource(id = R.string.movie_app_name),
-                color = Color.White,
-                fontSize = 22.sp
-            )
 
-            DotsIcon(onFilterClicked)
+            DropdownMenuItem(onClick = {
+                onFilterItemClicked(MoviesType.TOP_RATED)
+                mDisplayMenu = false
+            }) {
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Icon(imageVector = Icons.Filled.Star, contentDescription = null)
+                    Text(text = stringResource(id = R.string.top_rated))
+                }
+            }
+
+            DropdownMenuItem(onClick = {
+                onFilterItemClicked(MoviesType.POPULAR)
+                mDisplayMenu = false
+            }) {
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Icon(imageVector = Icons.Filled.ArrowForward, contentDescription = null)
+                    Text(text = stringResource(id = R.string.popular))
+                }
+            }
         }
-    }
+    })
+
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun Title() {
+    Text(
+        text = stringResource(id = R.string.movie_app_name),
+        color = Color.White,
+        fontSize = 22.sp
+    )
+}
+
 @Composable
 fun MoviesList(
     scaffoldState: ScaffoldState,
