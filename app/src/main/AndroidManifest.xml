@@ -17,7 +17,7 @@
         android:theme="@style/Theme.MovieClean"
         tools:targetApi="31">
         <activity
-            android:name=".presentaion.ui.MoviesActivity"
+            android:name=".presentaion.ui.HomeActivity"
             android:exported="true"
             android:theme="@style/Theme.MovieClean">
             <intent-filter>

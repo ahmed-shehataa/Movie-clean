@@ -1,5 +1,9 @@
 package com.ashehata.movieclean.domain.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Movie(
     val id: Int,
     val name: String = "",
@@ -8,4 +12,4 @@ data class Movie(
     val voteAverage: Double = 0.0,
     val overview: String = "",
     val releaseDate: String = "",
-)
+) : Parcelable

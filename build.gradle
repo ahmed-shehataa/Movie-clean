@@ -75,4 +75,7 @@ ext {
     coil = "2.2.2"
     accVersion = "0.17.0"
     pagingCompose = "1.0.0-alpha16"
+    nav_version = "2.5.2"
+    compose_hilt_navigation_version = "1.0.0"
+
 }

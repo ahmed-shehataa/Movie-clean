@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.PagingData
@@ -37,6 +39,7 @@ import com.ashehata.movieclean.domain.models.Movie
 import com.ashehata.movieclean.presentaion.models.MoviesType
 import com.ashehata.movieclean.presentaion.util.ToRateColor
 import com.ashehata.movieclean.presentaion.util.compose.items
+import com.ashehata.movieclean.presentaion.viewModel.MoviesViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -44,24 +47,29 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun MoviesScreen(
-    moviesFlow: Flow<PagingData<Movie>>,
-    onFilterClicked: (MoviesType) -> Unit = {},
+    moviesViewModel: MoviesViewModel,
     onMovieClicked: (Movie) -> Unit = {},
 ) {
-    val scaffoldState = rememberScaffoldState()
-    Scaffold(scaffoldState = scaffoldState,
+    // Handle config changes by saving MoviesType
+    var movieType by rememberSaveable {
+        mutableStateOf(MoviesType.POPULAR)
+    }
+    // Request the movies from VM
+    moviesViewModel.moviesType.trySend(movieType)
+
+    Scaffold(
         topBar = {
-            TopBar(onFilterClicked)
+            TopBar { type -> movieType = type }
         }, content = {
-            MoviesContent(scaffoldState, it, moviesFlow)
+            it.toString()
+            MoviesContent(moviesViewModel.moviesList, onMovieClicked)
         })
 }
 
 @Composable
 fun MoviesContent(
-    scaffoldState: ScaffoldState,
-    it: PaddingValues,
-    moviesFlow: Flow<PagingData<Movie>>
+    moviesFlow: Flow<PagingData<Movie>>,
+    onMovieClicked: (Movie) -> Unit
 ) {
     SwipeRefresh(
         state = rememberSwipeRefreshState(false),
@@ -75,7 +83,7 @@ fun MoviesContent(
                 fontSize = 20.sp,
                 color = MaterialTheme.colors.primary
             )
-            MoviesList(scaffoldState, it, moviesFlow)
+            MoviesList(moviesFlow, onMovieClicked)
         }
     }
 }
@@ -131,11 +139,7 @@ fun Title() {
 }
 
 @Composable
-fun MoviesList(
-    scaffoldState: ScaffoldState,
-    paddingValues: PaddingValues,
-    moviesFlow: Flow<PagingData<Movie>>
-) {
+fun MoviesList(moviesFlow: Flow<PagingData<Movie>>, onMovieClicked: (Movie) -> Unit) {
     Box(
         Modifier
             .fillMaxWidth()
@@ -154,7 +158,7 @@ fun MoviesList(
             ),
         ) {
             items(moviesItems) { movie ->
-                MovieItem(movie)
+                MovieItem(movie, onMovieClicked)
             }
 
         }
@@ -162,13 +166,14 @@ fun MoviesList(
 }
 
 @Composable
-fun MovieItem(movie: Movie?) {
+fun MovieItem(movie: Movie?, onMovieClicked: (Movie) -> Unit) {
     movie?.let {
         Column(
             Modifier
                 .padding(12.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .clickable {
+                    onMovieClicked(movie)
                 }
                 .background(MaterialTheme.colors.secondary)
                 .padding(12.dp),
@@ -196,7 +201,7 @@ fun MovieImageRate(movie: Movie) {
 }
 
 @Composable
-fun MovieRateBadge(voteAverage: Double, Modifier: Modifier) {
+fun MovieRateBadge(voteAverage: Double, Modifier: Modifier, textSze: TextUnit = 16.sp) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(50))
@@ -207,7 +212,7 @@ fun MovieRateBadge(voteAverage: Double, Modifier: Modifier) {
             modifier = Modifier
                 .padding(4.dp),
             text = voteAverage.toString(),
-            fontSize = 16.sp,
+            fontSize = textSze,
             color = Color.White,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -226,10 +231,7 @@ fun MovieImage(imageUrl: String) {
                 MaterialTheme.colors.secondary,
                 CircleShape
             )
-            .background(MaterialTheme.colors.primaryVariant)
-            .clickable {
-
-            }, elevation = 2.dp
+            .background(MaterialTheme.colors.primaryVariant), elevation = 2.dp
     ) {
         LoadImageAsync(
             modifier = Modifier

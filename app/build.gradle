@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -66,6 +67,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accVersion"
     // Paging Compose
     implementation "androidx.paging:paging-compose:$pagingCompose"
+    implementation "androidx.navigation:navigation-compose:$nav_version"
 
 
     // Architecture Components
@@ -78,7 +80,7 @@ dependencies {
     implementation "androidx.activity:activity-compose:$activityCompose"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$coScope"
     implementation "androidx.room:room-ktx:$room_version"
-    //implementation "androidx.lifecycle:lifecycle-runtime-ktx$coScope"
+    implementation "androidx.hilt:hilt-navigation-compose:$compose_hilt_navigation_version"
 
     // External libs
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
