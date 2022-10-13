@@ -5,4 +5,5 @@
     <string name="popular">Pouplar</string>
     <string name="title">Title</string>
     <string name="overview">Overview</string>
+    <string name="no_movies">No movies found</string>
 </resources>

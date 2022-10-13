@@ -1,9 +1,7 @@
 package com.ashehata.movieclean.presentaion.ui
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -29,7 +27,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
@@ -37,7 +37,7 @@ import coil.request.ImageRequest
 import com.ashehata.movieclean.R
 import com.ashehata.movieclean.domain.models.Movie
 import com.ashehata.movieclean.presentaion.models.MoviesType
-import com.ashehata.movieclean.presentaion.util.ToRateColor
+import com.ashehata.movieclean.presentaion.util.toRateColor
 import com.ashehata.movieclean.presentaion.util.compose.items
 import com.ashehata.movieclean.presentaion.viewModel.MoviesViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -60,30 +60,58 @@ fun MoviesScreen(
     Scaffold(
         topBar = {
             TopBar { type -> movieType = type }
-        }, content = {
+        },
+        content = {
             it.toString()
-            MoviesContent(moviesViewModel.moviesList, onMovieClicked)
+            MoviesContent(moviesViewModel.moviesList, onMovieClicked, onRefresh = {
+                moviesViewModel.refreshData.trySend(true)
+
+            })
         })
 }
 
 @Composable
 fun MoviesContent(
     moviesFlow: Flow<PagingData<Movie>>,
-    onMovieClicked: (Movie) -> Unit
+    onMovieClicked: (Movie) -> Unit,
+    onRefresh: () -> Unit
 ) {
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(false),
-        onRefresh = {
+    val moviesItems: LazyPagingItems<Movie> = moviesFlow.collectAsLazyPagingItems()
+    val isRefreshing = moviesItems.loadState.refresh is LoadState.Loading
 
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing),
+        onRefresh = {
+            onRefresh()
         },
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "Last refresh: 2 min ago",
-                fontSize = 20.sp,
-                color = MaterialTheme.colors.primary
-            )
-            MoviesList(moviesFlow, onMovieClicked)
+        MoviesUiStates(moviesItems)
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = "Last refresh: 2 min ago",
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colors.primary
+                )
+                MoviesList(moviesFlow, onMovieClicked)
+            }
+        }
+    }
+}
+
+@Composable
+fun MoviesUiStates(moviesItems: LazyPagingItems<Movie>) {
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .height(maxHeight)
+                .align(Alignment.Center)
+        ) {
+            with(moviesItems.loadState.refresh) {
+                ShowLoadingState(this)
+                ShowErrorState(this)
+            }
         }
     }
 }
@@ -91,42 +119,46 @@ fun MoviesContent(
 @Preview(showBackground = true)
 @Composable
 fun TopBar(onFilterItemClicked: (MoviesType) -> Unit = {}) {
-    var mDisplayMenu by remember { mutableStateOf(false) }
-    val mContext = LocalContext.current
     TopAppBar(title = {
         Title()
     }, actions = {
-        DotsIcon(onFilterClicked = {
-            mDisplayMenu = !mDisplayMenu
-        })
-        // Creating a dropdown menu
-        DropdownMenu(
-            expanded = mDisplayMenu,
-            onDismissRequest = { mDisplayMenu = false }
-        ) {
-
-            DropdownMenuItem(onClick = {
-                onFilterItemClicked(MoviesType.TOP_RATED)
-                mDisplayMenu = false
-            }) {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Icon(imageVector = Icons.Filled.Star, contentDescription = null)
-                    Text(text = stringResource(id = R.string.top_rated))
-                }
-            }
-
-            DropdownMenuItem(onClick = {
-                onFilterItemClicked(MoviesType.POPULAR)
-                mDisplayMenu = false
-            }) {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Icon(imageVector = Icons.Filled.ArrowForward, contentDescription = null)
-                    Text(text = stringResource(id = R.string.popular))
-                }
-            }
-        }
+        AppBarActions(onFilterItemClicked)
     })
 
+}
+
+@Composable
+fun AppBarActions(onFilterItemClicked: (MoviesType) -> Unit) {
+    var mDisplayMenu by remember { mutableStateOf(false) }
+    DotsIcon(onFilterClicked = {
+        mDisplayMenu = !mDisplayMenu
+    })
+    // Creating a dropdown menu
+    DropdownMenu(
+        expanded = mDisplayMenu,
+        onDismissRequest = { mDisplayMenu = false }
+    ) {
+
+        DropdownMenuItem(onClick = {
+            onFilterItemClicked(MoviesType.TOP_RATED)
+            mDisplayMenu = false
+        }) {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Icon(imageVector = Icons.Filled.Star, contentDescription = null)
+                Text(text = stringResource(id = R.string.top_rated))
+            }
+        }
+
+        DropdownMenuItem(onClick = {
+            onFilterItemClicked(MoviesType.POPULAR)
+            mDisplayMenu = false
+        }) {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Icon(imageVector = Icons.Filled.ArrowForward, contentDescription = null)
+                Text(text = stringResource(id = R.string.popular))
+            }
+        }
+    }
 }
 
 @Composable
@@ -157,10 +189,65 @@ fun MoviesList(moviesFlow: Flow<PagingData<Movie>>, onMovieClicked: (Movie) -> U
                 bottom = 8.dp
             ),
         ) {
+            // Movies items
             items(moviesItems) { movie ->
                 MovieItem(movie, onMovieClicked)
             }
+            //Footer
+            /*item {
+                ShowLoadingProgress(moviesItems.loadState.refresh)
+            }*/
 
+        }
+    }
+}
+
+@Composable
+fun ShowLoadingProgress(loadState: LoadState) {
+    if (loadState is LoadState.Loading) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(35.dp),
+                color = MaterialTheme.colors.primary
+            )
+        }
+    }
+}
+
+@Composable
+fun ShowErrorState(loadState: LoadState) {
+    if (loadState is LoadState.Error) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier.align(Alignment.Center),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    modifier = Modifier.size(200.dp),
+                    painter = painterResource(id = R.drawable.ic_cloud_server_antenna),
+                    contentDescription = null
+                )
+                Text(
+                    text = stringResource(id = R.string.no_movies),
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colors.primary,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ShowLoadingState(loadState: LoadState) {
+    if (loadState is LoadState.Loading) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .size(35.dp)
+                    .align(Alignment.Center),
+                color = MaterialTheme.colors.primary
+            )
         }
     }
 }
@@ -195,7 +282,7 @@ fun MovieItem(movie: Movie?, onMovieClicked: (Movie) -> Unit) {
 @Composable
 fun MovieImageRate(movie: Movie) {
     Box {
-        MovieImage(movie.imageUrl)
+        MovieImage(movie.imageUrlSmall)
         MovieRateBadge(movie.voteAverage, Modifier.align(Alignment.TopEnd))
     }
 }
@@ -205,7 +292,7 @@ fun MovieRateBadge(voteAverage: Double, Modifier: Modifier, textSze: TextUnit = 
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(50))
-            .background(voteAverage.ToRateColor())
+            .background(voteAverage.toRateColor())
 
     ) {
         Text(

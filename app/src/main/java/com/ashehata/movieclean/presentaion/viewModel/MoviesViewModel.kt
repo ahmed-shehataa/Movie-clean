@@ -20,6 +20,7 @@ class MoviesViewModel @Inject constructor(private val movieUseCase: MovieUseCase
     val moviesList: StateFlow<PagingData<Movie>> = _moviesFlow
 
     val moviesType: Channel<MoviesType> = Channel(capacity = Channel.UNLIMITED)
+    val refreshData: Channel<Boolean> = Channel(capacity = Channel.UNLIMITED)
 
 
     init {
@@ -29,10 +30,21 @@ class MoviesViewModel @Inject constructor(private val movieUseCase: MovieUseCase
                 .collectLatest { movieType ->
                     getMovies(movieType)
                 }
+
+        }
+        viewModelScope.launch {
+            refreshData.consumeAsFlow()
+                .collectLatest { mRefreshData ->
+                    if (mRefreshData) {
+                        _moviesFlow.value = PagingData.empty()
+                        getMovies(MoviesType.POPULAR)
+                        refreshData.trySend(false)
+                    }
+                }
         }
     }
 
-    private fun getMovies(movieType: MoviesType) {
+    private suspend fun getMovies(movieType: MoviesType) {
         // Get the Movies if there are no movies in the flow
         viewModelScope.launch {
             val moviesResult = when (movieType) {
