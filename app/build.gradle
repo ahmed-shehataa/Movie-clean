@@ -81,6 +81,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$coScope"
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.hilt:hilt-navigation-compose:$compose_hilt_navigation_version"
+    implementation "androidx.room:room-paging:$room_version"
 
     // External libs
     implementation "com.squareup.retrofit2:retrofit:$retrofit"

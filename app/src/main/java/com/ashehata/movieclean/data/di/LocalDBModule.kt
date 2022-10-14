@@ -5,8 +5,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.ashehata.movieclean.data.local.LocalData
+import com.ashehata.movieclean.App
+import com.ashehata.movieclean.data.local.dataStore.DataStore
+import com.ashehata.movieclean.data.local.dataStore.DataStoreImpl
+import com.ashehata.movieclean.data.local.room.MoviesDao
+import com.ashehata.movieclean.data.local.room.RemoteKeysDao
 import com.ashehata.movieclean.data.models.MovieLocal
+import com.ashehata.movieclean.data.models.RemoteKeys
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,16 +32,25 @@ class LocalDBModule {
     @Singleton
     fun provideRoomDB(
         applicationContext: Application
-    ): LocalData {
+    ): AppDatabase {
         return Room.databaseBuilder(
             (applicationContext as Context),
             AppDatabase::class.java, "movie-db"
-        ).build().movieDao()
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataStore(
+        myApp: App,
+    ): DataStore {
+        return DataStoreImpl(myApp.applicationContext)
     }
 
 }
 
-@Database(entities = [MovieLocal::class], version = 1)
+@Database(entities = [MovieLocal::class, RemoteKeys::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun movieDao(): LocalData
+    abstract fun movieDao(): MoviesDao
+    abstract fun remoteKeysDao(): RemoteKeysDao
 }

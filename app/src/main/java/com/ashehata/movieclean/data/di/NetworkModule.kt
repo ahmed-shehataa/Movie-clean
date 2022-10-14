@@ -4,7 +4,7 @@ import com.ashehata.movieclean.util.API_KEY
 import com.ashehata.movieclean.App
 import com.ashehata.movieclean.util.BASE_URL
 import com.ashehata.movieclean.BuildConfig
-import com.ashehata.movieclean.data.local.LocalData
+import com.ashehata.movieclean.data.local.dataStore.DataStore
 import com.ashehata.movieclean.data.remote.RemoteData
 import com.ashehata.movieclean.data.repo.MoviesRepositoryImpl
 import com.ashehata.movieclean.domain.repo.MoviesRepository
@@ -83,10 +83,11 @@ class NetworkModule {
     @Provides
     @Singleton
     fun bindMoviesRepo(
-        localData: LocalData,
-        remoteData: RemoteData
+        appDatabase: AppDatabase,
+        remoteData: RemoteData,
+        dataStore: DataStore
     ): MoviesRepository {
-        return MoviesRepositoryImpl(localData, remoteData)
+        return MoviesRepositoryImpl(appDatabase, remoteData, dataStore)
     }
 
     @Provides

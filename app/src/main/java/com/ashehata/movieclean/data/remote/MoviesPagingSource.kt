@@ -6,7 +6,7 @@ import com.ashehata.movieclean.util.Logger
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
 
 const val INITIAL_PAGE = 1
-const val PAGE_SIZE_PAGING_EXPLORE = 10
+const val PAGE_SIZE_PAGING_EXPLORE = 20
 const val TAG = "MoviesPagingSource"
 
 

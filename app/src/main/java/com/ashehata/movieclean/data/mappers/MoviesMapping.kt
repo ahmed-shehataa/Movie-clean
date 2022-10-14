@@ -20,11 +20,28 @@ fun MoviesRemoteResponse.Movie.toMovie(): Movie {
     )
 }
 
+
+fun MoviesRemoteResponse.Movie.toLocalMovie(isTopRated: Boolean = false): MovieLocal {
+    return MovieLocal(
+        id = this.id ?: -1,
+        isTopRated = isTopRated,
+        name = this.title ?: "",
+        imageUrlIcon = Image185(imagePath = this.backdropPath).getFullImageUrl(),
+        imageUrlFull = Image780(imagePath = this.backdropPath).getFullImageUrl(),
+        description = this.overview ?: "",
+        voteAverage = this.voteAverage ?: 0.0,
+        overview = this.overview ?: "",
+        releaseDate = this.releaseDate ?: "",
+    )
+}
+
+
 fun MovieLocal.toMovie(): Movie {
     return Movie(
         id = this.id ?: -1,
         name = this.name ?: "",
-        imageUrlSmall = this.imageUrl,
+        imageUrlSmall = this.imageUrlIcon,
+        imageUrlFull = this.imageUrlFull,
         description = this.overview ?: "",
         voteAverage = this.voteAverage ?: 0.0,
         overview = this.overview ?: "",

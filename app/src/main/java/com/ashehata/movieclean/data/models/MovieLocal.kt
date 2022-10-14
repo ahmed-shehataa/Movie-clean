@@ -6,10 +6,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "movies")
 data class MovieLocal(
-    @PrimaryKey val id: Int,
-    val name: String,
-    val imageUrl: String,
-    val description: String,
+    @PrimaryKey val id: Int? = null,
+    val isTopRated: Boolean,
+    val name: String = "",
+    val imageUrlFull: String = "",
+    val imageUrlIcon: String = "",
+    val description: String = "",
     val voteAverage: Double = 0.0,
     val overview: String = "",
     val releaseDate: String = "",
