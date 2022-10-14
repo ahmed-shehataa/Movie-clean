@@ -3,15 +3,18 @@ Simple Movie app with two screens tested (Unit &amp; Integration) testing implem
 
 ## Demo
 
+## APK Download
+[Click here](https://drive.google.com/drive/u/0/folders/1qNqkgHqWy9jcexae_uSZLWZVJmhPxp_O)
+
 
 ## In-App architecture
-<p align="center">
-  <img src="img/arch.png" height="250" width="900">
+<p>
+  <img src="img/arch.png" height="200" width="900">
 </p>
 
 ## In-App Testing
-<p align="center">
-  <img src="img/testing.png" height="300" width="300">
+<p>
+  <img src="img/testing.png" height="220" width="300">
 </p>
 
 ## Features
@@ -31,10 +34,6 @@ Simple Movie app with two screens tested (Unit &amp; Integration) testing implem
 - Coil
 - Unit testing
 - Integration testing
-
-
-## APK Download
-[Click here](https://drive.google.com/drive/u/0/folders/1qNqkgHqWy9jcexae_uSZLWZVJmhPxp_O)
 
 
 ## Resources
