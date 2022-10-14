@@ -2,7 +2,7 @@ package com.ashehata.movieclean.data.remote
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.ashehata.movieclean.Logger
+import com.ashehata.movieclean.util.Logger
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
 
 const val INITIAL_PAGE = 1

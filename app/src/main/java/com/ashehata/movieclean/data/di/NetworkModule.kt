@@ -1,8 +1,8 @@
 package com.ashehata.movieclean.data.di
 
-import com.ashehata.movieclean.API_KEY
+import com.ashehata.movieclean.util.API_KEY
 import com.ashehata.movieclean.App
-import com.ashehata.movieclean.BASE_URL
+import com.ashehata.movieclean.util.BASE_URL
 import com.ashehata.movieclean.BuildConfig
 import com.ashehata.movieclean.data.local.LocalData
 import com.ashehata.movieclean.data.remote.RemoteData

@@ -2,8 +2,8 @@ package com.ashehata.movieclean
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import com.ashehata.movieclean.util.Logger
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
