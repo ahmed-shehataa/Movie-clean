@@ -23,14 +23,14 @@ abstract class ImageMapper(
     }
 }
 
-class Image780(imagePath: String?) : ImageMapper(
+class Image780(imagePath: String) : ImageMapper(
     imageSize = ImageSize.W780,
-    imagePath = imagePath.toString()
+    imagePath = imagePath
 )
 
-class Image185(imagePath: String?) : ImageMapper(
+class Image185(imagePath: String) : ImageMapper(
     imageSize = ImageSize.W185,
-    imagePath = imagePath.toString()
+    imagePath = imagePath
 
 )
 

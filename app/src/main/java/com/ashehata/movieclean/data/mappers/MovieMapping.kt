@@ -11,8 +11,8 @@ fun MoviesRemoteResponse.Movie.toMovie(): Movie {
     return Movie(
         id = this.id ?: -1,
         name = this.title ?: "",
-        imageUrlSmall = Image185(imagePath = this.backdropPath).getFullImageUrl(),
-        imageUrlFull = Image780(imagePath = this.backdropPath).getFullImageUrl(),
+        imageUrlSmall = backdropPath?.let { Image185(imagePath = this.backdropPath).getFullImageUrl() } ?: "",
+        imageUrlFull = backdropPath?.let { Image780(imagePath = this.backdropPath).getFullImageUrl() } ?: "",
         description = this.overview ?: "",
         voteAverage = this.voteAverage ?: 0.0,
         overview = this.overview ?: "",
