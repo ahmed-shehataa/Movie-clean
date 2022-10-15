@@ -6,7 +6,7 @@ const val IMAGE_BASE_URL = "http://image.tmdb.org/t/p/"
 
 enum class ImageSize {
     W92,
-    W_54,
+    W54,
     W185,
     W342,
     W500,
@@ -18,7 +18,7 @@ abstract class ImageMapper(
     private val imageSize: ImageSize = ImageSize.W185,
     private val imagePath: String = ""
 ) {
-    fun getFullImageUrl(): String {
+    open fun getFullImageUrl(): String {
         return baseUrl + imageSize.toString().toLowerCase(Locale.getDefault()) + imagePath
     }
 }
