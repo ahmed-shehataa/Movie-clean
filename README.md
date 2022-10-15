@@ -8,7 +8,7 @@ Simple Movie app with two screens tested (Unit &amp; Integration) testing implem
 
 
 ## APK Download
-[Click here](https://drive.google.com/drive/u/0/folders/1qNqkgHqWy9jcexae_uSZLWZVJmhPxp_O)
+[Click here](https://drive.google.com/file/d/15yxJwuv35lZ2-g77FJnGheyvP9xcccKq/view?usp=sharing)
 
 
 ## In-App architecture
