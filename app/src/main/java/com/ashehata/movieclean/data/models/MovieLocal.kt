@@ -1,9 +1,11 @@
 package com.ashehata.movieclean.data.models
 
+import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
+@Keep
 @Entity(tableName = "movies")
 data class MovieLocal(
     @PrimaryKey val id: Int? = null,

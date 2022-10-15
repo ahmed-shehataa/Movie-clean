@@ -2,6 +2,10 @@
 Simple Movie app with two screens tested (Unit &amp; Integration) testing implemented with clean arch and last tech in android.
 
 ## Demo
+<p>
+  <img src="img/demo.gif" height="600" width="250">
+</p>
+
 
 ## APK Download
 [Click here](https://drive.google.com/drive/u/0/folders/1qNqkgHqWy9jcexae_uSZLWZVJmhPxp_O)
@@ -18,6 +22,8 @@ Simple Movie app with two screens tested (Unit &amp; Integration) testing implem
 </p>
 
 ## Features
+- Offline cashing
+- Obfuscation
 - Simple UI
 - Animations
 - Config changes handling
@@ -34,6 +40,7 @@ Simple Movie app with two screens tested (Unit &amp; Integration) testing implem
 - Coil
 - Unit testing
 - Integration testing
+- Proguard
 
 
 ## Resources
@@ -53,6 +60,7 @@ Simple Movie app with two screens tested (Unit &amp; Integration) testing implem
 - Pagination
   - [Page from network and database](https://developer.android.com/topic/libraries/architecture/paging/v3-network-db)
   - [Android Paging Advanced codelab](https://developer.android.com/codelabs/android-paging#0) 
+  - [Room paging](https://genicsblog.com/gouravkhunger/pagination-in-android-room-database-using-the-paging-3-library) 
   
   
 - Testing

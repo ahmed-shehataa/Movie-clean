@@ -1,8 +1,10 @@
 package com.ashehata.movieclean.domain.models
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 
+@Keep
 @Parcelize
 data class Movie(
     val id: Int = 0,

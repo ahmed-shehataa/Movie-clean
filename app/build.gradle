@@ -22,10 +22,21 @@ android {
             useSupportLibrary true
         }
     }
+    signingConfigs {
+       // my.jks information
+       release {
+           storePassword project.property("MyApp.signing.password")
+           storeFile file(project.property("MyApp.signing"))
+           keyAlias project.property("MyApp.signing.alias")
+           keyPassword project.property("MyApp.signing.password")
+       }
+   }
 
     buildTypes {
         release {
-            minifyEnabled false
+            // Sign the release apk
+            signingConfig signingConfigs.release
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
