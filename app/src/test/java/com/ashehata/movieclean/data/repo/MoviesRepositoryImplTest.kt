@@ -2,11 +2,7 @@ package com.ashehata.movieclean.data.repo
 
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
 import com.ashehata.movieclean.domain.repo.MoviesRepository
-import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
@@ -18,17 +14,17 @@ class MoviesRepositoryImplTest {
     private lateinit var moviesRepository: MoviesRepository
     private var popularMovies = listOf(
         MoviesRemoteResponse.Movie(
-            id = 10,
+            movieId = 10,
             title = "ahmed",
             overview = "overview"
         ),
         MoviesRemoteResponse.Movie(
-            id = 12,
+            movieId = 12,
             title = "ali",
             overview = "overview"
         ),
         MoviesRemoteResponse.Movie(
-            id = 13,
+            movieId = 13,
             title = "mo",
             overview = "overview"
         )
@@ -36,17 +32,17 @@ class MoviesRepositoryImplTest {
 
     private var topRatedMovies = listOf(
         MoviesRemoteResponse.Movie(
-            id = 10,
+            movieId = 10,
             title = "ahmed",
             overview = "overview"
         ),
         MoviesRemoteResponse.Movie(
-            id = 12,
+            movieId = 12,
             title = "ali",
             overview = "overview"
         ),
         MoviesRemoteResponse.Movie(
-            id = 13,
+            movieId = 13,
             title = "mo",
             overview = "overview"
         )

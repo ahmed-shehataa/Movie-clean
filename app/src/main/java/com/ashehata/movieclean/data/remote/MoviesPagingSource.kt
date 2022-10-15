@@ -4,14 +4,15 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ashehata.movieclean.Logger
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
+import com.ashehata.movieclean.data.util.INITIAL_PAGE
+import com.ashehata.movieclean.data.util.cachedPages
 
-const val INITIAL_PAGE = 1
-const val PAGE_SIZE_PAGING_EXPLORE = 10
 const val TAG = "MoviesPagingSource"
 
 
 class MoviesPagingSource(
-    private val methodCall : suspend (Int) -> MoviesRemoteResponse,
+    private val apiCall: suspend (Int) -> MoviesRemoteResponse,
+    private val localCall: suspend (List<MoviesRemoteResponse.Movie>) -> Unit = {},
     private val firstPage: Int = INITIAL_PAGE,
 ) : PagingSource<Int, MoviesRemoteResponse.Movie>() {
 
@@ -21,7 +22,10 @@ class MoviesPagingSource(
             val currentPage = params.key ?: firstPage
 
             Logger.i(TAG, "current_movie_page:: $currentPage")
-            val moviesList = methodCall.invoke(currentPage).movies ?: emptyList()
+            val moviesList = apiCall.invoke(currentPage).movies ?: emptyList()
+            if (moviesList.isNotEmpty() && currentPage in cachedPages) {
+                localCall(moviesList)
+            }
 
             Logger.i(TAG, "moviesList:: " + moviesList.size.toString())
 

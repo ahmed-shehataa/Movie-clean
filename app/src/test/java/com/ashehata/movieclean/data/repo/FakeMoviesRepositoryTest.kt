@@ -9,6 +9,7 @@ import com.ashehata.movieclean.data.remote.RemoteData
 import com.ashehata.movieclean.domain.repo.MoviesRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 
 
 class FakeMoviesRepositoryTest(
@@ -17,7 +18,7 @@ class FakeMoviesRepositoryTest(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MoviesRepository {
 
-    override suspend fun getPopularMovies(): Pager<Int, MoviesRemoteResponse.Movie> {
+   /* override suspend fun getPopularMovies(): Flow<List<MoviesRemoteResponse.Movie>> {
         return Pager(config = PagingConfig(
             pageSize = 10
         ), pagingSourceFactory = {
@@ -27,7 +28,7 @@ class FakeMoviesRepositoryTest(
         })
     }
 
-    override suspend fun getTopRatedMovies(): Pager<Int, MoviesRemoteResponse.Movie> {
+    override suspend fun getTopRatedMovies(): Flow<List<MoviesRemoteResponse.Movie>> {
         return Pager(config = PagingConfig(
             pageSize = 10
         ), pagingSourceFactory = {
@@ -35,7 +36,7 @@ class FakeMoviesRepositoryTest(
                 remoteData.getTopRatedMovies(1)
             })
         })
-    }
+    }*/
 
 
 }

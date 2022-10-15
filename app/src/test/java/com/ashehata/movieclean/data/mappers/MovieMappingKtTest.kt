@@ -15,7 +15,7 @@ class MovieMappingKtTest {
         val remoteMovie = MoviesRemoteResponse.Movie(
             adult = false,
             backdropPath = "/iuFbU5jiNh8DAxLBGifZCvv3KmB.jpg",
-            id = 4935,
+            movieId = 4935,
             originalLanguage = "ja",
             originalTitle = "ハウルの動く城",
             overview = "When Sophie, a shy young woman, is cursed with an old body by a spiteful witch, her only chance of breaking the spell lies with a self-indulgent yet insecure young wizard and his companions in his legged, walking castle.",
@@ -47,7 +47,7 @@ class MovieMappingKtTest {
     @Test
     fun `toMovie() nullable remote movie to movie with default values`() {
         val remoteMovie = MoviesRemoteResponse.Movie(
-            adult = null, backdropPath = null, id = null,
+            adult = null, backdropPath = null, movieId = null,
             originalLanguage = null, originalTitle = null,
             overview = null, popularity = null, posterPath = null,
             releaseDate = null, title = null, video = null,

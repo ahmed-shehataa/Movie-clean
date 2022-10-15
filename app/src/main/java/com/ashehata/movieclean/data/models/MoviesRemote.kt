@@ -23,7 +23,7 @@ data class MoviesRemoteResponse(
         @field:Json(name = "genre_ids")
         val genreIds: List<Int?>? = listOf(),
         @field:Json(name = "id")
-        val id: Int? = 0, // 760161
+        val movieId: Int? = 0, // 760161
         @field:Json(name = "original_language")
         val originalLanguage: String? = "", // en
         @field:Json(name = "original_title")
