@@ -5,8 +5,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import com.ashehata.movieclean.util.Logger
+import com.ashehata.movieclean.util.networkCallback
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.ashehata.movieclean.data.models.MovieLocal
 
 @Dao
-interface LocalData {
+interface MoviesDao {
 
     @Query("SELECT * FROM movies ORDER BY id ASC LIMIT :limit OFFSET :offset")
     suspend fun getMovies(limit: Int, offset: Int) : List<MovieLocal>

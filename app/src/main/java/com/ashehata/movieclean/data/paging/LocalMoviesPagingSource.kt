@@ -1,31 +1,29 @@
-package com.ashehata.movieclean.data.local
+package com.ashehata.movieclean.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.ashehata.movieclean.Logger
+import com.ashehata.movieclean.util.Logger
+import com.ashehata.movieclean.data.local.MoviesDao
 import com.ashehata.movieclean.data.models.MovieLocal
 import com.ashehata.movieclean.data.util.INITIAL_PAGE
-import com.ashehata.movieclean.data.util.PAGE_SIZE_PAGING_LOCAL_MOVIE
 import java.io.IOException
 
-const val TAG = "MoviesPagingSource"
+private const val TAG = "MoviesPagingSource"
 
 class MoviesLocalPagingSource(
-    private val methodCall: suspend (Int, Int) -> List<MovieLocal>,
+    private val moviesDao: MoviesDao,
     private val firstPage: Int = INITIAL_PAGE,
 ) : PagingSource<Int, MovieLocal>() {
-
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieLocal> {
         return try {
             val currentPage = params.key ?: firstPage
 
             Logger.i(TAG, "current_movie_page:: $currentPage")
-            val moviesList = methodCall.invoke(
-                PAGE_SIZE_PAGING_LOCAL_MOVIE,
-                (currentPage - 1) * PAGE_SIZE_PAGING_LOCAL_MOVIE
+            val moviesList = moviesDao.getMovies(
+                params.loadSize,
+                (currentPage - 1) * params.loadSize
             )
-            Logger.i(TAG, "moviesListLocal:: " + moviesList.size.toString())
 
             val nextPage: Int? =
                 if (moviesList.isEmpty()) null else currentPage.plus(1)

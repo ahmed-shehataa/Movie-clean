@@ -1,4 +1,4 @@
-package com.ashehata.movieclean
+package com.ashehata.movieclean.util
 
 import android.net.ConnectivityManager
 import android.net.Network

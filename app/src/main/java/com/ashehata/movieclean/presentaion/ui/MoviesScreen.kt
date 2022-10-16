@@ -34,7 +34,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import com.ashehata.movieclean.Logger
 import com.ashehata.movieclean.R
 import com.ashehata.movieclean.domain.models.Movie
 import com.ashehata.movieclean.presentaion.models.MoviesType

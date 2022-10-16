@@ -1,14 +1,12 @@
-package com.ashehata.movieclean.data.repo
+package com.ashehata.movieclean.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.ashehata.movieclean.data.local.LocalData
-import com.ashehata.movieclean.data.local.MoviesLocalPagingSource
-import com.ashehata.movieclean.data.mappers.toLocalMovie
 import com.ashehata.movieclean.data.models.MovieLocal
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
-import com.ashehata.movieclean.data.remote.MoviesPagingSource
-import com.ashehata.movieclean.data.remote.RemoteData
+import com.ashehata.movieclean.data.paging.MoviesLocalPagingSource
+import com.ashehata.movieclean.data.paging.MoviesPagingSource
+import com.ashehata.movieclean.data.paging.MoviesType
 import com.ashehata.movieclean.data.util.PAGE_SIZE_PAGING_LOCAL_MOVIE
 import com.ashehata.movieclean.data.util.PAGE_SIZE_PAGING_REMOTE_MOVIE
 import com.ashehata.movieclean.domain.repo.MoviesRepository
@@ -19,39 +17,35 @@ import javax.inject.Inject
 
 
 class MoviesRepositoryImpl @Inject constructor(
-    private val localData: LocalData,
-    private val remoteData: RemoteData,
+    private val moviesLocalPagingSource: MoviesLocalPagingSource,
+    private val moviesPagingSource: MoviesPagingSource,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MoviesRepository {
 
 
     override suspend fun getPopularMovies(): Pager<Int, MoviesRemoteResponse.Movie> =
         withContext(dispatcher) {
+            // change movies type
+            moviesPagingSource.setMoviesType(MoviesType.POPULAR)
+            moviesPagingSource.setForceCaching(true)
             // get from API
             return@withContext Pager(config = PagingConfig(
                 pageSize = PAGE_SIZE_PAGING_REMOTE_MOVIE,
                 enablePlaceholders = false
             ), pagingSourceFactory = {
-                MoviesPagingSource(apiCall = { page ->
-                    remoteData.getPopularMovies(page)
-                }, localCall = {
-                    val localMovies = it.map {
-                        it.toLocalMovie()
-                    }
-                    localData.insertMovies(localMovies)
-                })
+                moviesPagingSource
             })
         }
 
     override suspend fun getTopRatedMovies(): Pager<Int, MoviesRemoteResponse.Movie> =
         withContext(dispatcher) {
+            moviesPagingSource.setMoviesType(MoviesType.TOP_RATED)
+            moviesPagingSource.setForceCaching(false)
             return@withContext Pager(config = PagingConfig(
                 pageSize = PAGE_SIZE_PAGING_REMOTE_MOVIE,
                 enablePlaceholders = false
             ), pagingSourceFactory = {
-                MoviesPagingSource(apiCall = { page ->
-                    remoteData.getTopRatedMovies(page)
-                })
+                moviesPagingSource
             })
         }
 
@@ -61,9 +55,7 @@ class MoviesRepositoryImpl @Inject constructor(
                 pageSize = PAGE_SIZE_PAGING_LOCAL_MOVIE,
                 enablePlaceholders = false
             ), pagingSourceFactory = {
-                MoviesLocalPagingSource(methodCall = { limit, offset ->
-                    localData.getMovies(limit, offset)
-                })
+                moviesLocalPagingSource
             })
         }
 

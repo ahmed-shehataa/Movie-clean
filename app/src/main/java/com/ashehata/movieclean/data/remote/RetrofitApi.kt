@@ -4,7 +4,7 @@ import com.ashehata.movieclean.data.models.MoviesRemoteResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface RemoteData {
+interface RetrofitApi {
 
     @GET("/3/movie/popular")
     suspend fun getPopularMovies(@Query("page") page: Int): MoviesRemoteResponse

@@ -1,12 +1,12 @@
-package com.ashehata.movieclean.data.repo
+package com.ashehata.movieclean.data.repository
 
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
-import com.ashehata.movieclean.data.remote.RemoteData
+import com.ashehata.movieclean.data.remote.RetrofitApi
 
-class FakeRemoteData(
+class FakeRetrofitApi(
     private val popularMovies: MutableList<MoviesRemoteResponse.Movie> = mutableListOf(),
     private val topRatedMovies: MutableList<MoviesRemoteResponse.Movie> = mutableListOf(),
-) : RemoteData {
+) : RetrofitApi {
 
 
     override suspend fun getPopularMovies(page: Int): MoviesRemoteResponse {
