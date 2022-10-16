@@ -3,7 +3,7 @@ Simple Movie app with two screens tested (Unit &amp; Integration) testing implem
 
 ## Demo
 <p>
-  <img src="img/demo.gif" height="600" width="250">
+  <img src="img/demo.gif" height="500" width="250">
 </p>
 
 
@@ -17,6 +17,9 @@ Simple Movie app with two screens tested (Unit &amp; Integration) testing implem
 </p>
 
 ## In-App Testing
+Unit testing for:
+- LocalMoviesPaginSource
+- RemoteMoviesPaginSource
 <p>
   <img src="img/testing.png" height="220" width="300">
 </p>
@@ -37,6 +40,7 @@ Simple Movie app with two screens tested (Unit &amp; Integration) testing implem
 - Channels & flows
 - Paging3
 - Retrofit
+- Room
 - Coil
 - Unit testing
 - Integration testing
@@ -65,4 +69,5 @@ Simple Movie app with two screens tested (Unit &amp; Integration) testing implem
   
 - Testing
   - [Basic Testing codelab](https://developer.android.com/codelabs/advanced-android-kotlin-training-testing-test-doubles#0)
-  
+  - [Test paging source](https://medium.com/@mohamed.gamal.elsayed/android-how-to-test-paging-3-pagingsource-433251ade028)
+
