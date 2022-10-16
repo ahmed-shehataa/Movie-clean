@@ -3,7 +3,7 @@ Simple Movie app with two screens tested (Unit &amp; Integration) testing implem
 
 ## Demo
 <p>
-  <img src="img/demo.gif" height="600" width="250">
+  <img src="img/demo.gif" height="500" width="250">
 </p>
 
 
