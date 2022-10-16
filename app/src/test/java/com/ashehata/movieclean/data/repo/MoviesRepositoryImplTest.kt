@@ -7,6 +7,7 @@ import org.junit.Before
 import org.junit.Test
 
 
+/*
 class MoviesRepositoryImplTest {
 
     private lateinit var remoteData: FakeRemoteData
@@ -63,10 +64,12 @@ class MoviesRepositoryImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `getPopularMovies()`() {
-       /* runTest {
+       */
+/* runTest {
             val mPopularMovies = moviesRepository.getPopularMovies().flow.first().
             assertThat(mPopularMovies).isEqualTo(popularMovies)
-        }*/
+        }*//*
+
     }
 
     @Test
@@ -74,4 +77,4 @@ class MoviesRepositoryImplTest {
 
     }
 
-}
+}*/

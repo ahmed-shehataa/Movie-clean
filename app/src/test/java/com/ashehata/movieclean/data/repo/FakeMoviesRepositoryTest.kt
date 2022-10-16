@@ -12,13 +12,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 
 
+/*
 class FakeMoviesRepositoryTest(
     private val localData: LocalData,
     private val remoteData: RemoteData,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MoviesRepository {
 
-   /* override suspend fun getPopularMovies(): Flow<List<MoviesRemoteResponse.Movie>> {
+   */
+/* override suspend fun getPopularMovies(): Flow<List<MoviesRemoteResponse.Movie>> {
         return Pager(config = PagingConfig(
             pageSize = 10
         ), pagingSourceFactory = {
@@ -36,7 +38,8 @@ class FakeMoviesRepositoryTest(
                 remoteData.getTopRatedMovies(1)
             })
         })
-    }*/
+    }*//*
 
 
-}
+
+}*/

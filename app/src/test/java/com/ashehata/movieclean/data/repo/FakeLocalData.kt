@@ -3,6 +3,7 @@ package com.ashehata.movieclean.data.repo
 import com.ashehata.movieclean.data.local.LocalData
 import com.ashehata.movieclean.data.models.MovieLocal
 
+/*
 class FakeLocalData(
     private val movies: MutableList<MovieLocal> = mutableListOf()
 ) : LocalData {
@@ -22,4 +23,4 @@ class FakeLocalData(
     override suspend fun clearMovies() {
         this.movies.clear()
     }
-}
+}*/

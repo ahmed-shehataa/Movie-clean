@@ -32,14 +32,7 @@ class MoviesRepositoryImpl @Inject constructor(
                 pageSize = PAGE_SIZE_PAGING_REMOTE_MOVIE,
                 enablePlaceholders = false
             ), pagingSourceFactory = {
-                MoviesPagingSource(apiCall = { page ->
-                    remoteData.getPopularMovies(page)
-                }, localCall = {
-                    val localMovies = it.map {
-                        it.toLocalMovie()
-                    }
-                    localData.insertMovies(localMovies)
-                })
+                MoviesPagingSource(remoteData, localData, forceCashing = true)
             })
         }
 
@@ -49,9 +42,7 @@ class MoviesRepositoryImpl @Inject constructor(
                 pageSize = PAGE_SIZE_PAGING_REMOTE_MOVIE,
                 enablePlaceholders = false
             ), pagingSourceFactory = {
-                MoviesPagingSource(apiCall = { page ->
-                    remoteData.getTopRatedMovies(page)
-                })
+                MoviesPagingSource(remoteData, localData)
             })
         }
 
