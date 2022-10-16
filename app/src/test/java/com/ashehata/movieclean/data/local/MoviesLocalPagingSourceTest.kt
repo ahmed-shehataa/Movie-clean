@@ -3,7 +3,6 @@ package com.ashehata.movieclean.data.local
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.paging.PagingSource
 import com.ashehata.movieclean.data.models.MovieLocal
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
@@ -19,7 +18,7 @@ class MoviesLocalPagingSourceTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     @Mock
-    lateinit var localData: LocalData
+    lateinit var moviesDao: MoviesDao
 
     private lateinit var moviesLocalPagingSource: MoviesLocalPagingSource
 
@@ -43,7 +42,7 @@ class MoviesLocalPagingSourceTest {
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        moviesLocalPagingSource = MoviesLocalPagingSource(localData, firstPage = 1)
+        moviesLocalPagingSource = MoviesLocalPagingSource(moviesDao, firstPage = 1)
     }
 
 
@@ -52,7 +51,7 @@ class MoviesLocalPagingSourceTest {
         val limit = 20
         val offset = 0
 
-        given(localData.getMovies(limit, offset)).willReturn(moviesList)
+        given(moviesDao.getMovies(limit, offset)).willReturn(moviesList)
 
         val result = moviesLocalPagingSource.load(
             PagingSource.LoadParams.Refresh(
@@ -76,7 +75,7 @@ class MoviesLocalPagingSourceTest {
         val limit = 20
         val offset = 1 * 20
 
-        given(localData.getMovies(limit, offset)).willReturn(moviesList)
+        given(moviesDao.getMovies(limit, offset)).willReturn(moviesList)
 
         val result = moviesLocalPagingSource.load(
             PagingSource.LoadParams.Append(

@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.ashehata.movieclean.data.local.LocalData
+import com.ashehata.movieclean.data.local.MoviesDao
 import com.ashehata.movieclean.data.models.MovieLocal
 import dagger.Module
 import dagger.Provides
@@ -27,7 +27,7 @@ class LocalDBModule {
     @Singleton
     fun provideRoomDB(
         applicationContext: Application
-    ): LocalData {
+    ): MoviesDao {
         return Room.databaseBuilder(
             (applicationContext as Context),
             AppDatabase::class.java, "movie-db"
@@ -38,5 +38,5 @@ class LocalDBModule {
 
 @Database(entities = [MovieLocal::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun movieDao(): LocalData
+    abstract fun movieDao(): MoviesDao
 }

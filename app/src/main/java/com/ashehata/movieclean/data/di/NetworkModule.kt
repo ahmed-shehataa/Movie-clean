@@ -1,14 +1,14 @@
 package com.ashehata.movieclean.data.di
 
-import com.ashehata.movieclean.API_KEY
+import com.ashehata.movieclean.util.API_KEY
 import com.ashehata.movieclean.App
-import com.ashehata.movieclean.BASE_URL
+import com.ashehata.movieclean.util.BASE_URL
 import com.ashehata.movieclean.BuildConfig
-import com.ashehata.movieclean.data.local.LocalData
-import com.ashehata.movieclean.data.local.MoviesLocalPagingSource
-import com.ashehata.movieclean.data.remote.MoviesPagingSource
-import com.ashehata.movieclean.data.remote.RemoteData
-import com.ashehata.movieclean.data.repo.MoviesRepositoryImpl
+import com.ashehata.movieclean.data.local.MoviesDao
+import com.ashehata.movieclean.data.paging.MoviesLocalPagingSource
+import com.ashehata.movieclean.data.paging.MoviesPagingSource
+import com.ashehata.movieclean.data.remote.RetrofitApi
+import com.ashehata.movieclean.data.repository.MoviesRepositoryImpl
 import com.ashehata.movieclean.domain.repo.MoviesRepository
 import com.ashehata.movieclean.domain.useCase.MovieUseCase
 import com.ashehata.movieclean.domain.useCase.MoviesUseCaseImpl
@@ -77,27 +77,27 @@ class NetworkModule {
     @Singleton
     fun provideAPIService(
         retrofit: Retrofit,
-    ): RemoteData {
-        return retrofit.create(RemoteData::class.java)
+    ): RetrofitApi {
+        return retrofit.create(RetrofitApi::class.java)
     }
 
 
     @Provides
     @Singleton
     fun bindMoviesPagingLocal(
-        localData: LocalData,
-        remoteData: RemoteData
+        moviesDao: MoviesDao,
+        retrofitApi: RetrofitApi
     ): MoviesLocalPagingSource {
-        return MoviesLocalPagingSource(localData)
+        return MoviesLocalPagingSource(moviesDao)
     }
 
     @Provides
     @Singleton
     fun bindMoviesPagingRemote(
-        localData: LocalData,
-        remoteData: RemoteData
+        moviesDao: MoviesDao,
+        retrofitApi: RetrofitApi
     ): MoviesPagingSource {
-        return MoviesPagingSource(remoteData, localData)
+        return MoviesPagingSource(retrofitApi, moviesDao)
     }
 
 

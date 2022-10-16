@@ -1,17 +1,17 @@
-package com.ashehata.movieclean.data.local
+package com.ashehata.movieclean.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.ashehata.movieclean.Logger
+import com.ashehata.movieclean.util.Logger
+import com.ashehata.movieclean.data.local.MoviesDao
 import com.ashehata.movieclean.data.models.MovieLocal
 import com.ashehata.movieclean.data.util.INITIAL_PAGE
-import com.ashehata.movieclean.data.util.PAGE_SIZE_PAGING_LOCAL_MOVIE
 import java.io.IOException
 
-const val TAG = "MoviesPagingSource"
+private const val TAG = "MoviesPagingSource"
 
 class MoviesLocalPagingSource(
-    private val localData: LocalData,
+    private val moviesDao: MoviesDao,
     private val firstPage: Int = INITIAL_PAGE,
 ) : PagingSource<Int, MovieLocal>() {
 
@@ -20,7 +20,7 @@ class MoviesLocalPagingSource(
             val currentPage = params.key ?: firstPage
 
             Logger.i(TAG, "current_movie_page:: $currentPage")
-            val moviesList = localData.getMovies(
+            val moviesList = moviesDao.getMovies(
                 params.loadSize,
                 (currentPage - 1) * params.loadSize
             )

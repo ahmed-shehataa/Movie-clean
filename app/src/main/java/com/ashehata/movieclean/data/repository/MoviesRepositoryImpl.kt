@@ -1,15 +1,12 @@
-package com.ashehata.movieclean.data.repo
+package com.ashehata.movieclean.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.ashehata.movieclean.data.local.LocalData
-import com.ashehata.movieclean.data.local.MoviesLocalPagingSource
-import com.ashehata.movieclean.data.mappers.toLocalMovie
 import com.ashehata.movieclean.data.models.MovieLocal
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
-import com.ashehata.movieclean.data.remote.MoviesPagingSource
-import com.ashehata.movieclean.data.remote.MoviesType
-import com.ashehata.movieclean.data.remote.RemoteData
+import com.ashehata.movieclean.data.paging.MoviesLocalPagingSource
+import com.ashehata.movieclean.data.paging.MoviesPagingSource
+import com.ashehata.movieclean.data.paging.MoviesType
 import com.ashehata.movieclean.data.util.PAGE_SIZE_PAGING_LOCAL_MOVIE
 import com.ashehata.movieclean.data.util.PAGE_SIZE_PAGING_REMOTE_MOVIE
 import com.ashehata.movieclean.domain.repo.MoviesRepository
@@ -43,6 +40,7 @@ class MoviesRepositoryImpl @Inject constructor(
     override suspend fun getTopRatedMovies(): Pager<Int, MoviesRemoteResponse.Movie> =
         withContext(dispatcher) {
             moviesPagingSource.setMoviesType(MoviesType.TOP_RATED)
+            moviesPagingSource.setForceCaching(false)
             return@withContext Pager(config = PagingConfig(
                 pageSize = PAGE_SIZE_PAGING_REMOTE_MOVIE,
                 enablePlaceholders = false

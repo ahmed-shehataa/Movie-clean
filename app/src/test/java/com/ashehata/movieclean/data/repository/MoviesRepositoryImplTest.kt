@@ -1,13 +1,11 @@
-package com.ashehata.movieclean.data.repo
+package com.ashehata.movieclean.data.repository
 
 import androidx.paging.*
 import app.cash.turbine.test
 import com.ashehata.movieclean.data.local.MoviesLocalPagingSource
-import com.ashehata.movieclean.data.mappers.toLocalMovie
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
 import com.ashehata.movieclean.data.remote.MoviesPagingSource
 import com.ashehata.movieclean.data.util.PAGE_SIZE_PAGING_REMOTE_MOVIE
-import com.ashehata.movieclean.data.util.collectDataForTest
 import com.ashehata.movieclean.domain.repo.MoviesRepository
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.*

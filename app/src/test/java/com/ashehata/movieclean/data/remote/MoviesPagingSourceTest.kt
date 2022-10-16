@@ -1,7 +1,7 @@
 package com.ashehata.movieclean.data.remote
 
 import androidx.paging.PagingSource
-import com.ashehata.movieclean.data.local.LocalData
+import com.ashehata.movieclean.data.local.MoviesDao
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
@@ -15,10 +15,10 @@ import org.mockito.kotlin.*
 class MoviesPagingSourceTest {
 
     @Mock
-    lateinit var remoteData: RemoteData
+    lateinit var retrofitApi: RetrofitApi
 
     @Mock
-    lateinit var localData: LocalData
+    lateinit var moviesDao: MoviesDao
 
     lateinit var moviesPagingSource: MoviesPagingSource
 
@@ -65,14 +65,14 @@ class MoviesPagingSourceTest {
     @Test
     fun `load popular movies from remote paging source - failure - http error`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
-            remoteData, localData,
+            retrofitApi, moviesDao,
             moviesType = MoviesType.POPULAR,
             forceCashing = false
         )
 
         val error = RuntimeException("404", Throwable())
 
-        given(remoteData.getPopularMovies(any())).willThrow(error)
+        given(retrofitApi.getPopularMovies(any())).willThrow(error)
 
 
         val expected = PagingSource.LoadResult.Error<Int, MoviesRemoteResponse.Movie>(error)
@@ -90,13 +90,13 @@ class MoviesPagingSourceTest {
     @Test
     fun `refresh popular movies from remote paging source - success`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
-            remoteData, localData,
+            retrofitApi, moviesDao,
             moviesType = MoviesType.POPULAR,
             forceCashing = false
         )
 
 
-        given(remoteData.getPopularMovies(any())).willReturn(moviesRemoteResponse)
+        given(retrofitApi.getPopularMovies(any())).willReturn(moviesRemoteResponse)
 
         val expectedResult = PagingSource.LoadResult.Page(
             data = moviesRemoteResponse.movies ?: emptyList(),
@@ -117,13 +117,13 @@ class MoviesPagingSourceTest {
     @Test
     fun `append popular movies from remote paging source - success`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
-            remoteData, localData,
+            retrofitApi, moviesDao,
             moviesType = MoviesType.POPULAR,
             forceCashing = false
         )
 
 
-        given(remoteData.getPopularMovies(any())).willReturn(nextMoviesRemoteResponse)
+        given(retrofitApi.getPopularMovies(any())).willReturn(nextMoviesRemoteResponse)
 
         val expectedResult = PagingSource.LoadResult.Page(
             data = nextMoviesRemoteResponse.movies ?: emptyList(),
@@ -146,14 +146,14 @@ class MoviesPagingSourceTest {
     fun `load top rated movies from remote paging source - failure - http error`() =
         runBlocking {
             moviesPagingSource = MoviesPagingSource(
-                remoteData, localData,
+                retrofitApi, moviesDao,
                 moviesType = MoviesType.TOP_RATED,
                 forceCashing = false
             )
 
             val error = RuntimeException("404", Throwable())
 
-            given(remoteData.getTopRatedMovies(any())).willThrow(error)
+            given(retrofitApi.getTopRatedMovies(any())).willThrow(error)
 
 
             val expected = PagingSource.LoadResult.Error<Int, MoviesRemoteResponse.Movie>(error)
@@ -171,13 +171,13 @@ class MoviesPagingSourceTest {
     @Test
     fun `refresh top rated movies from remote paging source - success`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
-            remoteData, localData,
+            retrofitApi, moviesDao,
             moviesType = MoviesType.TOP_RATED,
             forceCashing = false
         )
 
 
-        given(remoteData.getTopRatedMovies(any())).willReturn(moviesRemoteResponse)
+        given(retrofitApi.getTopRatedMovies(any())).willReturn(moviesRemoteResponse)
 
         val expectedResult = PagingSource.LoadResult.Page(
             data = moviesRemoteResponse.movies ?: emptyList(),
@@ -198,13 +198,13 @@ class MoviesPagingSourceTest {
     @Test
     fun `append top rated movies from remote paging source - success`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
-            remoteData, localData,
+            retrofitApi, moviesDao,
             moviesType = MoviesType.TOP_RATED,
             forceCashing = false
         )
 
 
-        given(remoteData.getTopRatedMovies(any())).willReturn(nextMoviesRemoteResponse)
+        given(retrofitApi.getTopRatedMovies(any())).willReturn(nextMoviesRemoteResponse)
 
         val expectedResult = PagingSource.LoadResult.Page(
             data = nextMoviesRemoteResponse.movies ?: emptyList(),
@@ -225,13 +225,13 @@ class MoviesPagingSourceTest {
     @Test
     fun `load and enable cache popular movies- success`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
-            remoteData, localData,
+            retrofitApi, moviesDao,
             moviesType = MoviesType.POPULAR,
             forceCashing = true,
             cachingPagesNum = pagesToCache
         )
 
-        given(remoteData.getPopularMovies(any())).willReturn(moviesRemoteResponse)
+        given(retrofitApi.getPopularMovies(any())).willReturn(moviesRemoteResponse)
 
         moviesPagingSource.load(
             PagingSource.LoadParams.Refresh(
@@ -241,19 +241,19 @@ class MoviesPagingSourceTest {
             )
         )
 
-        verify(localData, times(1)).insertMovies(any())
+        verify(moviesDao, times(1)).insertMovies(any())
     }
 
     @Test
     fun `load and disable cache popular movies- success`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
-            remoteData, localData,
+            retrofitApi, moviesDao,
             moviesType = MoviesType.POPULAR,
             forceCashing = false,
             cachingPagesNum = pagesToCache
         )
 
-        given(remoteData.getPopularMovies(any())).willReturn(moviesRemoteResponse)
+        given(retrofitApi.getPopularMovies(any())).willReturn(moviesRemoteResponse)
 
         moviesPagingSource.load(
             PagingSource.LoadParams.Refresh(
@@ -263,13 +263,13 @@ class MoviesPagingSourceTest {
             )
         )
 
-        verify(localData, never()).insertMovies(any())
+        verify(moviesDao, never()).insertMovies(any())
     }
 
     @Test
     fun `pass invalid movie type(NONE) - failed`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
-            remoteData, localData,
+            retrofitApi, moviesDao,
             moviesType = MoviesType.NONE,
             forceCashing = false,
         )
@@ -278,7 +278,7 @@ class MoviesPagingSourceTest {
             Throwable("Please select movies type to get")
         )
 
-        given(remoteData.getPopularMovies(any())).willThrow(error)
+        given(retrofitApi.getPopularMovies(any())).willThrow(error)
 
         val expected = PagingSource.LoadResult.Error<Int, MoviesRemoteResponse.Movie>(error)
 

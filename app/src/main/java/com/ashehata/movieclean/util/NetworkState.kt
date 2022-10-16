@@ -1,4 +1,4 @@
-package com.ashehata.movieclean
+package com.ashehata.movieclean.util
 
 object NetworkState {
 
@@ -7,7 +7,7 @@ object NetworkState {
 
     fun setNetworkState(isOnline: Boolean) {
         synchronized(this) {
-            this.isOnline = isOnline
+            NetworkState.isOnline = isOnline
         }
     }
 

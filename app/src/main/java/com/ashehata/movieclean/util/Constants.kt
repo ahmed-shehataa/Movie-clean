@@ -1,4 +1,4 @@
-package com.ashehata.movieclean
+package com.ashehata.movieclean.util
 
 
 const val BASE_URL = "https://api.themoviedb.org/"

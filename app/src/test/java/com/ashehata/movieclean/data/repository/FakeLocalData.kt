@@ -1,7 +1,4 @@
-package com.ashehata.movieclean.data.repo
-
-import com.ashehata.movieclean.data.local.LocalData
-import com.ashehata.movieclean.data.models.MovieLocal
+package com.ashehata.movieclean.data.repository
 
 /*
 class FakeLocalData(

@@ -2,8 +2,8 @@ package com.ashehata.movieclean.domain.useCase
 
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.ashehata.movieclean.Logger
-import com.ashehata.movieclean.NetworkState
+import com.ashehata.movieclean.util.Logger
+import com.ashehata.movieclean.util.NetworkState
 import com.ashehata.movieclean.data.mappers.toMovie
 import com.ashehata.movieclean.domain.models.Movie
 import com.ashehata.movieclean.domain.repo.MoviesRepository
