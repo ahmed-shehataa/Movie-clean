@@ -5,6 +5,8 @@ import com.ashehata.movieclean.App
 import com.ashehata.movieclean.BASE_URL
 import com.ashehata.movieclean.BuildConfig
 import com.ashehata.movieclean.data.local.LocalData
+import com.ashehata.movieclean.data.local.MoviesLocalPagingSource
+import com.ashehata.movieclean.data.remote.MoviesPagingSource
 import com.ashehata.movieclean.data.remote.RemoteData
 import com.ashehata.movieclean.data.repo.MoviesRepositoryImpl
 import com.ashehata.movieclean.domain.repo.MoviesRepository
@@ -82,11 +84,30 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun bindMoviesRepo(
+    fun bindMoviesPagingLocal(
         localData: LocalData,
         remoteData: RemoteData
+    ): MoviesLocalPagingSource {
+        return MoviesLocalPagingSource(localData)
+    }
+
+    @Provides
+    @Singleton
+    fun bindMoviesPagingRemote(
+        localData: LocalData,
+        remoteData: RemoteData
+    ): MoviesPagingSource {
+        return MoviesPagingSource(remoteData, localData)
+    }
+
+
+    @Provides
+    @Singleton
+    fun bindMoviesRepo(
+        moviesLocalPagingSource: MoviesLocalPagingSource,
+        moviesPagingSource: MoviesPagingSource,
     ): MoviesRepository {
-        return MoviesRepositoryImpl(localData, remoteData)
+        return MoviesRepositoryImpl(moviesLocalPagingSource, moviesPagingSource)
     }
 
     @Provides

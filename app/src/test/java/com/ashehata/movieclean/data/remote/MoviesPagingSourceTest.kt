@@ -1,13 +1,11 @@
 package com.ashehata.movieclean.data.remote
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.paging.PagingSource
 import com.ashehata.movieclean.data.local.LocalData
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.mockito.BDDMockito.given
 import org.mockito.Mock
@@ -15,9 +13,6 @@ import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.*
 
 class MoviesPagingSourceTest {
-
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
 
     @Mock
     lateinit var remoteData: RemoteData
@@ -68,7 +63,7 @@ class MoviesPagingSourceTest {
     }
 
     @Test
-    fun `load popular movies from remote paging source - failure - http error`() = runBlockingTest {
+    fun `load popular movies from remote paging source - failure - http error`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
             remoteData, localData,
             moviesType = MoviesType.POPULAR,
@@ -93,7 +88,7 @@ class MoviesPagingSourceTest {
     }
 
     @Test
-    fun `refresh popular movies from remote paging source - success`() = runBlockingTest {
+    fun `refresh popular movies from remote paging source - success`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
             remoteData, localData,
             moviesType = MoviesType.POPULAR,
@@ -120,7 +115,7 @@ class MoviesPagingSourceTest {
     }
 
     @Test
-    fun `append popular movies from remote paging source - success`() = runBlockingTest {
+    fun `append popular movies from remote paging source - success`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
             remoteData, localData,
             moviesType = MoviesType.POPULAR,
@@ -149,7 +144,7 @@ class MoviesPagingSourceTest {
 
     @Test
     fun `load top rated movies from remote paging source - failure - http error`() =
-        runBlockingTest {
+        runBlocking {
             moviesPagingSource = MoviesPagingSource(
                 remoteData, localData,
                 moviesType = MoviesType.TOP_RATED,
@@ -174,7 +169,7 @@ class MoviesPagingSourceTest {
         }
 
     @Test
-    fun `refresh top rated movies from remote paging source - success`() = runBlockingTest {
+    fun `refresh top rated movies from remote paging source - success`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
             remoteData, localData,
             moviesType = MoviesType.TOP_RATED,
@@ -201,7 +196,7 @@ class MoviesPagingSourceTest {
     }
 
     @Test
-    fun `append top rated movies from remote paging source - success`() = runBlockingTest {
+    fun `append top rated movies from remote paging source - success`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
             remoteData, localData,
             moviesType = MoviesType.TOP_RATED,
@@ -228,7 +223,7 @@ class MoviesPagingSourceTest {
     }
 
     @Test
-    fun `load and enable cache popular movies- success`() = runBlockingTest {
+    fun `load and enable cache popular movies- success`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
             remoteData, localData,
             moviesType = MoviesType.POPULAR,
@@ -250,7 +245,7 @@ class MoviesPagingSourceTest {
     }
 
     @Test
-    fun `load and disable cache popular movies- success`() = runBlockingTest {
+    fun `load and disable cache popular movies- success`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
             remoteData, localData,
             moviesType = MoviesType.POPULAR,
@@ -272,7 +267,7 @@ class MoviesPagingSourceTest {
     }
 
     @Test
-    fun `pass invalid movie type(NONE) - failed`() = runBlockingTest {
+    fun `pass invalid movie type(NONE) - failed`() = runBlocking {
         moviesPagingSource = MoviesPagingSource(
             remoteData, localData,
             moviesType = MoviesType.NONE,

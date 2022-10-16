@@ -21,11 +21,18 @@ class MoviesPagingSource(
     private val remoteData: RemoteData,
     private val localData: LocalData,
     private val firstPage: Int = INITIAL_PAGE,
-    private val moviesType: MoviesType = MoviesType.NONE,
-    private val forceCashing: Boolean = false,
+    private var moviesType: MoviesType = MoviesType.NONE,
+    private var forceCashing: Boolean = false,
     private val cachingPagesNum: List<Int> = cachedPages,
 ) : PagingSource<Int, MoviesRemoteResponse.Movie>() {
 
+    fun setForceCaching(isCache: Boolean) {
+        forceCashing = isCache
+    }
+
+    fun setMoviesType(moviesType: MoviesType ) {
+        this.moviesType = moviesType
+    }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MoviesRemoteResponse.Movie> {
         return try {
