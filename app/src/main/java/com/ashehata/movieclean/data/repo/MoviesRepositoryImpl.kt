@@ -52,9 +52,7 @@ class MoviesRepositoryImpl @Inject constructor(
                 pageSize = PAGE_SIZE_PAGING_LOCAL_MOVIE,
                 enablePlaceholders = false
             ), pagingSourceFactory = {
-                MoviesLocalPagingSource(methodCall = { limit, offset ->
-                    localData.getMovies(limit, offset)
-                })
+                MoviesLocalPagingSource(localData)
             })
         }
 

@@ -11,21 +11,19 @@ import java.io.IOException
 const val TAG = "MoviesPagingSource"
 
 class MoviesLocalPagingSource(
-    private val methodCall: suspend (Int, Int) -> List<MovieLocal>,
+    private val localData: LocalData,
     private val firstPage: Int = INITIAL_PAGE,
 ) : PagingSource<Int, MovieLocal>() {
-
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieLocal> {
         return try {
             val currentPage = params.key ?: firstPage
 
             Logger.i(TAG, "current_movie_page:: $currentPage")
-            val moviesList = methodCall.invoke(
-                PAGE_SIZE_PAGING_LOCAL_MOVIE,
-                (currentPage - 1) * PAGE_SIZE_PAGING_LOCAL_MOVIE
+            val moviesList = localData.getMovies(
+                params.loadSize,
+                (currentPage - 1) * params.loadSize
             )
-            Logger.i(TAG, "moviesListLocal:: " + moviesList.size.toString())
 
             val nextPage: Int? =
                 if (moviesList.isEmpty()) null else currentPage.plus(1)
