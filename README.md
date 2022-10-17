@@ -1,6 +1,14 @@
 # Movie-clean
 Simple Movie app with two screens tested (Unit &amp; Integration) testing implemented with clean arch and last tech in android.
 
+## ScreenShots:
+<p align="center">
+  <img src="img/1.png" height="450" width="220">
+  <img src="img/2.png" height="450" width="220">
+  <img src="img/3.png" height="450" width="220">
+  <img src="img/4.png" height="450" width="220">
+</p>
+
 ## Demo
 <p>
   <img src="img/demo.gif" height="500" width="250">
@@ -34,6 +42,7 @@ UI test cases:
 
 
 ## Features
+- Dark and light mode
 - Offline cashing
 - Obfuscation
 - Simple UI
