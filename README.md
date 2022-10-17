@@ -61,8 +61,7 @@ UI test cases:
 - Room
 - Coil
 - Unit testing
-- UI test
-- Integration testing
+- UI testing 
 - Proguard
 
 
