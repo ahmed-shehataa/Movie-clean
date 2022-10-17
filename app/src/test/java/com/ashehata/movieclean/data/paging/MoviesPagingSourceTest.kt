@@ -1,8 +1,9 @@
-package com.ashehata.movieclean.data.remote
+package com.ashehata.movieclean.data.paging
 
 import androidx.paging.PagingSource
 import com.ashehata.movieclean.data.local.MoviesDao
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
+import com.ashehata.movieclean.data.remote.RetrofitApi
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.Before

@@ -14,13 +14,18 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -45,6 +50,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.Flow
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MoviesScreen(
     moviesViewModel: MoviesViewModel,
@@ -58,6 +64,9 @@ fun MoviesScreen(
     moviesViewModel.moviesType.trySend(movieType)
 
     Scaffold(
+        modifier = Modifier.testTag("movies_screen").semantics {
+            testTagsAsResourceId = true
+        },
         topBar = {
             TopBar { type -> movieType = type }
         },
@@ -114,7 +123,7 @@ fun MoviesUiStates(moviesItems: LazyPagingItems<Movie>) {
 @Preview(showBackground = true)
 @Composable
 fun TopBar(onFilterItemClicked: (MoviesType) -> Unit = {}) {
-    TopAppBar(title = {
+    TopAppBar(modifier = Modifier.semantics { contentDescription = "Movies_app_bar" }, title = {
         Title()
     }, actions = {
         AppBarActions(onFilterItemClicked)
@@ -130,6 +139,7 @@ fun AppBarActions(onFilterItemClicked: (MoviesType) -> Unit) {
     })
     // Creating a dropdown menu
     DropdownMenu(
+        modifier = Modifier.semantics { contentDescription = "popup_menu" },
         expanded = mDisplayMenu,
         onDismissRequest = { mDisplayMenu = false }
     ) {
@@ -176,6 +186,7 @@ fun MoviesList(moviesFlow: Flow<PagingData<Movie>>, onMovieClicked: (Movie) -> U
         val moviesItems = moviesFlow.collectAsLazyPagingItems()
 
         LazyVerticalGrid(
+            modifier = Modifier.testTag("myLazyVerticalGrid"),
             columns = GridCells.Adaptive(100.dp),
             contentPadding = PaddingValues(
                 start = 8.dp,
@@ -357,7 +368,7 @@ fun DotsIcon(
     size: Dp = 50.dp
 ) {
     Box(
-        modifier = Modifier
+        modifier = Modifier.semantics{contentDescription = "filter_icon"}
             .size(size)
             .clip(RoundedCornerShape(50))
             .padding(4.dp)

@@ -9,6 +9,7 @@ import com.ashehata.movieclean.domain.models.Movie
 
 fun MoviesRemoteResponse.Movie.toMovie(): Movie {
     return Movie(
+        id = -1,
         movieId = this.movieId ?: -1,
         name = this.title ?: "",
         imageUrlSmall = backdropPath?.let { Image185(imagePath = this.backdropPath).getFullImageUrl() } ?: "",

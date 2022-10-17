@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -25,7 +26,9 @@ import com.ashehata.movieclean.presentaion.util.compose.CircularProgressBar
 @Composable
 @Preview(showBackground = true)
 fun MovieDetailsScreen(movie: Movie = Movie(id = -1, name = "Dummy", voteAverage = 7.5)) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(
+        Modifier.testTag("movie_details"), verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
         val scrollState = rememberScrollState()
         val transition =
             updateTransition(scrollState.value != 0, label = "")
