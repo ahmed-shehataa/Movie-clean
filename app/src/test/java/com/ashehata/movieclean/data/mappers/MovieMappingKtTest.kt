@@ -29,7 +29,8 @@ class MovieMappingKtTest {
         )
 
         val movie = Movie(
-            id = 4935,
+            id = -1,
+            movieId = 4935,
             name = "Howl's Moving Castle",
             imageUrlSmall = Image185(imagePath = "/iuFbU5jiNh8DAxLBGifZCvv3KmB.jpg").getFullImageUrl(),
             imageUrlFull = Image780(imagePath = "/iuFbU5jiNh8DAxLBGifZCvv3KmB.jpg").getFullImageUrl(),
@@ -54,8 +55,10 @@ class MovieMappingKtTest {
             voteAverage = null, voteCount = null
         )
 
-        val movie = Movie(
-            id = -1, name = "",
+        val expected = Movie(
+            id = -1,
+            movieId = -1,
+            name = "",
             imageUrlSmall = "",
             imageUrlFull = "",
             description = "",
@@ -64,8 +67,8 @@ class MovieMappingKtTest {
             overview = ""
         )
 
-        val mappedMovie = remoteMovie.toMovie()
+        val result = remoteMovie.toMovie()
 
-        assertThat(mappedMovie).isEqualTo(movie)
+        assertThat(result).isEqualTo(expected)
     }
 }

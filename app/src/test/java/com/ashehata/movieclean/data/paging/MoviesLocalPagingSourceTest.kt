@@ -1,7 +1,8 @@
-package com.ashehata.movieclean.data.local
+package com.ashehata.movieclean.data.paging
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.paging.PagingSource
+import com.ashehata.movieclean.data.local.MoviesDao
 import com.ashehata.movieclean.data.models.MovieLocal
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runBlockingTest
