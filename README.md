@@ -17,12 +17,21 @@ Simple Movie app with two screens tested (Unit &amp; Integration) testing implem
 </p>
 
 ## In-App Testing
-Unit testing for:
-- LocalMoviesPaginSource
-- RemoteMoviesPaginSource
 <p>
   <img src="img/testing.png" height="220" width="300">
 </p>
+
+Unit testing for:
+- LocalMoviesPaginSource
+- RemoteMoviesPaginSource
+- Some utils funs
+
+UI test cases:
+- moviesScreen_is_app_bar_displayed()
+- moviesScreen_open_filter_popup()
+- moviesScreen_open_movie_details_screen()
+- moviesScreen_open_movie_details_screen_then_back()
+
 
 ## Features
 - Offline cashing
@@ -43,6 +52,7 @@ Unit testing for:
 - Room
 - Coil
 - Unit testing
+- UI test
 - Integration testing
 - Proguard
 
@@ -70,4 +80,8 @@ Unit testing for:
 - Testing
   - [Basic Testing codelab](https://developer.android.com/codelabs/advanced-android-kotlin-training-testing-test-doubles#0)
   - [Test paging source](https://medium.com/@mohamed.gamal.elsayed/android-how-to-test-paging-3-pagingsource-433251ade028)
+  - [Testing your Compose layout](https://developer.android.com/jetpack/compose/testing#assertions)
+  - [Write automated tests with UI Automator](https://developer.android.com/training/testing/other-components/ui-automator)
+  - [Testing cheatsheet](https://developer.android.com/jetpack/compose/testing-cheatsheet)
+  - [Testing in Jetpack Compose - codelab](https://developer.android.com/codelabs/jetpack-compose-testing)
 
