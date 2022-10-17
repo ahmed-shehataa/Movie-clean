@@ -21,7 +21,7 @@ class MoviesPagingSourceTest {
     @Mock
     lateinit var moviesDao: MoviesDao
 
-    lateinit var moviesPagingSource: MoviesPagingSource
+    lateinit var remoteMoviesPagingSource: RemoteMoviesPagingSource
 
 
     companion object {
@@ -65,7 +65,7 @@ class MoviesPagingSourceTest {
 
     @Test
     fun `load popular movies from remote paging source - failure - http error`() = runBlocking {
-        moviesPagingSource = MoviesPagingSource(
+        remoteMoviesPagingSource = RemoteMoviesPagingSource(
             retrofitApi, moviesDao,
             moviesType = MoviesType.POPULAR,
             forceCashing = false
@@ -78,7 +78,7 @@ class MoviesPagingSourceTest {
 
         val expected = PagingSource.LoadResult.Error<Int, MoviesRemoteResponse.Movie>(error)
 
-        val result = moviesPagingSource.load(
+        val result = remoteMoviesPagingSource.load(
             PagingSource.LoadParams.Refresh(
                 key = 0,
                 loadSize = 10,
@@ -90,7 +90,7 @@ class MoviesPagingSourceTest {
 
     @Test
     fun `refresh popular movies from remote paging source - success`() = runBlocking {
-        moviesPagingSource = MoviesPagingSource(
+        remoteMoviesPagingSource = RemoteMoviesPagingSource(
             retrofitApi, moviesDao,
             moviesType = MoviesType.POPULAR,
             forceCashing = false
@@ -105,7 +105,7 @@ class MoviesPagingSourceTest {
             nextKey = 2
         )
 
-        val result = moviesPagingSource.load(
+        val result = remoteMoviesPagingSource.load(
             PagingSource.LoadParams.Refresh(
                 key = null,
                 loadSize = 10,
@@ -117,7 +117,7 @@ class MoviesPagingSourceTest {
 
     @Test
     fun `append popular movies from remote paging source - success`() = runBlocking {
-        moviesPagingSource = MoviesPagingSource(
+        remoteMoviesPagingSource = RemoteMoviesPagingSource(
             retrofitApi, moviesDao,
             moviesType = MoviesType.POPULAR,
             forceCashing = false
@@ -132,7 +132,7 @@ class MoviesPagingSourceTest {
             nextKey = 3
         )
 
-        val result = moviesPagingSource.load(
+        val result = remoteMoviesPagingSource.load(
             PagingSource.LoadParams.Append(
                 key = 2,
                 loadSize = 10,
@@ -146,7 +146,7 @@ class MoviesPagingSourceTest {
     @Test
     fun `load top rated movies from remote paging source - failure - http error`() =
         runBlocking {
-            moviesPagingSource = MoviesPagingSource(
+            remoteMoviesPagingSource = RemoteMoviesPagingSource(
                 retrofitApi, moviesDao,
                 moviesType = MoviesType.TOP_RATED,
                 forceCashing = false
@@ -159,7 +159,7 @@ class MoviesPagingSourceTest {
 
             val expected = PagingSource.LoadResult.Error<Int, MoviesRemoteResponse.Movie>(error)
 
-            val result = moviesPagingSource.load(
+            val result = remoteMoviesPagingSource.load(
                 PagingSource.LoadParams.Refresh(
                     key = 0,
                     loadSize = 10,
@@ -171,7 +171,7 @@ class MoviesPagingSourceTest {
 
     @Test
     fun `refresh top rated movies from remote paging source - success`() = runBlocking {
-        moviesPagingSource = MoviesPagingSource(
+        remoteMoviesPagingSource = RemoteMoviesPagingSource(
             retrofitApi, moviesDao,
             moviesType = MoviesType.TOP_RATED,
             forceCashing = false
@@ -186,7 +186,7 @@ class MoviesPagingSourceTest {
             nextKey = 2
         )
 
-        val result = moviesPagingSource.load(
+        val result = remoteMoviesPagingSource.load(
             PagingSource.LoadParams.Refresh(
                 key = null,
                 loadSize = 10,
@@ -198,7 +198,7 @@ class MoviesPagingSourceTest {
 
     @Test
     fun `append top rated movies from remote paging source - success`() = runBlocking {
-        moviesPagingSource = MoviesPagingSource(
+        remoteMoviesPagingSource = RemoteMoviesPagingSource(
             retrofitApi, moviesDao,
             moviesType = MoviesType.TOP_RATED,
             forceCashing = false
@@ -213,7 +213,7 @@ class MoviesPagingSourceTest {
             nextKey = 3
         )
 
-        val result = moviesPagingSource.load(
+        val result = remoteMoviesPagingSource.load(
             PagingSource.LoadParams.Append(
                 key = 2,
                 loadSize = 10,
@@ -225,7 +225,7 @@ class MoviesPagingSourceTest {
 
     @Test
     fun `load and enable cache popular movies- success`() = runBlocking {
-        moviesPagingSource = MoviesPagingSource(
+        remoteMoviesPagingSource = RemoteMoviesPagingSource(
             retrofitApi, moviesDao,
             moviesType = MoviesType.POPULAR,
             forceCashing = true,
@@ -234,7 +234,7 @@ class MoviesPagingSourceTest {
 
         given(retrofitApi.getPopularMovies(any())).willReturn(moviesRemoteResponse)
 
-        moviesPagingSource.load(
+        remoteMoviesPagingSource.load(
             PagingSource.LoadParams.Refresh(
                 key = pagesToCache.random(),
                 loadSize = 10,
@@ -247,7 +247,7 @@ class MoviesPagingSourceTest {
 
     @Test
     fun `load and disable cache popular movies- success`() = runBlocking {
-        moviesPagingSource = MoviesPagingSource(
+        remoteMoviesPagingSource = RemoteMoviesPagingSource(
             retrofitApi, moviesDao,
             moviesType = MoviesType.POPULAR,
             forceCashing = false,
@@ -256,7 +256,7 @@ class MoviesPagingSourceTest {
 
         given(retrofitApi.getPopularMovies(any())).willReturn(moviesRemoteResponse)
 
-        moviesPagingSource.load(
+        remoteMoviesPagingSource.load(
             PagingSource.LoadParams.Refresh(
                 key = pagesToCache.random(),
                 loadSize = 10,
@@ -269,7 +269,7 @@ class MoviesPagingSourceTest {
 
     @Test
     fun `pass invalid movie type(NONE) - failed`() = runBlocking {
-        moviesPagingSource = MoviesPagingSource(
+        remoteMoviesPagingSource = RemoteMoviesPagingSource(
             retrofitApi, moviesDao,
             moviesType = MoviesType.NONE,
             forceCashing = false,
@@ -283,7 +283,7 @@ class MoviesPagingSourceTest {
 
         val expected = PagingSource.LoadResult.Error<Int, MoviesRemoteResponse.Movie>(error)
 
-        val pagingResult = moviesPagingSource.load(
+        val pagingResult = remoteMoviesPagingSource.load(
             PagingSource.LoadParams.Refresh(
                 key = pagesToCache.random(),
                 loadSize = 10,

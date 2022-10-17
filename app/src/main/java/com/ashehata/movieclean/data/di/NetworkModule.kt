@@ -4,14 +4,8 @@ import com.ashehata.movieclean.util.API_KEY
 import com.ashehata.movieclean.App
 import com.ashehata.movieclean.util.BASE_URL
 import com.ashehata.movieclean.BuildConfig
-import com.ashehata.movieclean.data.local.MoviesDao
-import com.ashehata.movieclean.data.paging.MoviesLocalPagingSource
-import com.ashehata.movieclean.data.paging.MoviesPagingSource
 import com.ashehata.movieclean.data.remote.RetrofitApi
-import com.ashehata.movieclean.data.repository.MoviesRepositoryImpl
-import com.ashehata.movieclean.domain.repo.MoviesRepository
-import com.ashehata.movieclean.domain.useCase.MovieUseCase
-import com.ashehata.movieclean.domain.useCase.MoviesUseCaseImpl
+import com.ashehata.movieclean.util.NetworkState
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -81,42 +75,10 @@ class NetworkModule {
         return retrofit.create(RetrofitApi::class.java)
     }
 
-
     @Provides
     @Singleton
-    fun bindMoviesPagingLocal(
-        moviesDao: MoviesDao,
-        retrofitApi: RetrofitApi
-    ): MoviesLocalPagingSource {
-        return MoviesLocalPagingSource(moviesDao)
+    fun provideNetworkState(): NetworkState {
+        return NetworkState
     }
-
-    @Provides
-    @Singleton
-    fun bindMoviesPagingRemote(
-        moviesDao: MoviesDao,
-        retrofitApi: RetrofitApi
-    ): MoviesPagingSource {
-        return MoviesPagingSource(retrofitApi, moviesDao)
-    }
-
-
-    @Provides
-    @Singleton
-    fun bindMoviesRepo(
-        moviesLocalPagingSource: MoviesLocalPagingSource,
-        moviesPagingSource: MoviesPagingSource,
-    ): MoviesRepository {
-        return MoviesRepositoryImpl(moviesLocalPagingSource, moviesPagingSource)
-    }
-
-    @Provides
-    @Singleton
-    fun bindMoviesUseCase(
-        moviesRepository: MoviesRepository
-    ): MovieUseCase {
-        return MoviesUseCaseImpl(moviesRepository)
-    }
-
 
 }

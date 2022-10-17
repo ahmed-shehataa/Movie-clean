@@ -21,7 +21,7 @@ class MoviesLocalPagingSourceTest {
     @Mock
     lateinit var moviesDao: MoviesDao
 
-    private lateinit var moviesLocalPagingSource: MoviesLocalPagingSource
+    private lateinit var moviesLocalPagingSource: LocalMoviesPagingSource
 
     companion object {
         val moviesList: List<MovieLocal> = (1..20).map {
@@ -43,7 +43,7 @@ class MoviesLocalPagingSourceTest {
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        moviesLocalPagingSource = MoviesLocalPagingSource(moviesDao, firstPage = 1)
+        moviesLocalPagingSource = LocalMoviesPagingSource(moviesDao, firstPage = 1)
     }
 
 

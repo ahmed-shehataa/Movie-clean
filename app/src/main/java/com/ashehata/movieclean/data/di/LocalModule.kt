@@ -17,12 +17,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class LocalDBModule {
 
-    /*@Provides
-    @Singleton
-    fun provideApp(): App {
-        return App.instance
-    }*/
-
     @Provides
     @Singleton
     fun provideRoomDB(

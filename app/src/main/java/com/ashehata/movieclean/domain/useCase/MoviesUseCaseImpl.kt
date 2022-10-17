@@ -2,11 +2,11 @@ package com.ashehata.movieclean.domain.useCase
 
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.ashehata.movieclean.util.Logger
-import com.ashehata.movieclean.util.NetworkState
-import com.ashehata.movieclean.data.mappers.toMovie
+import com.ashehata.movieclean.data.mappers.movie.toMovie
 import com.ashehata.movieclean.domain.models.Movie
 import com.ashehata.movieclean.domain.repo.MoviesRepository
+import com.ashehata.movieclean.util.Logger
+import com.ashehata.movieclean.util.NetworkState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map

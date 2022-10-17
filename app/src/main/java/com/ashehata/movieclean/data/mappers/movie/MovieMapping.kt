@@ -1,4 +1,4 @@
-package com.ashehata.movieclean.data.mappers
+package com.ashehata.movieclean.data.mappers.movie
 
 import com.ashehata.movieclean.data.mappers.image.Image780
 import com.ashehata.movieclean.data.mappers.image.Image185

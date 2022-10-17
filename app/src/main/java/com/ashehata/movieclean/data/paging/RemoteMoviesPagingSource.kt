@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ashehata.movieclean.util.Logger
 import com.ashehata.movieclean.data.local.MoviesDao
-import com.ashehata.movieclean.data.mappers.toLocalMovie
+import com.ashehata.movieclean.data.mappers.movie.toLocalMovie
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
 import com.ashehata.movieclean.data.remote.RetrofitApi
 import com.ashehata.movieclean.data.util.INITIAL_PAGE
@@ -18,7 +18,7 @@ enum class MoviesType {
     NONE
 }
 
-class MoviesPagingSource(
+class RemoteMoviesPagingSource(
     private val retrofitApi: RetrofitApi,
     private val moviesDao: MoviesDao,
     private val firstPage: Int = INITIAL_PAGE,

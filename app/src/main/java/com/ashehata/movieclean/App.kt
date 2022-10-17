@@ -28,7 +28,6 @@ class App : Application() {
         if (BuildConfig.DEBUG) {
             Logger.isEnabled = true
         }
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 
     private fun initNetworkConnectivity() {

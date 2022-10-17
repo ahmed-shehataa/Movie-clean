@@ -3,8 +3,8 @@ package com.ashehata.movieclean.data.repository
 import androidx.paging.*
 import app.cash.turbine.test
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
-import com.ashehata.movieclean.data.paging.MoviesLocalPagingSource
-import com.ashehata.movieclean.data.paging.MoviesPagingSource
+import com.ashehata.movieclean.data.paging.LocalMoviesPagingSource
+import com.ashehata.movieclean.data.paging.RemoteMoviesPagingSource
 import com.ashehata.movieclean.data.util.PAGE_SIZE_PAGING_REMOTE_MOVIE
 import com.ashehata.movieclean.domain.repo.MoviesRepository
 import com.google.common.truth.Truth.assertThat
@@ -17,9 +17,9 @@ import org.mockito.kotlin.mock
 
 class MoviesRepositoryImplTest {
 
-    lateinit var moviesPagingSource: MoviesPagingSource
+    lateinit var remoteMoviesPagingSource: RemoteMoviesPagingSource
 
-    lateinit var moviesLocalPagingSource: MoviesLocalPagingSource
+    lateinit var moviesLocalPagingSource: LocalMoviesPagingSource
 
     private lateinit var moviesRepositoryImpl: MoviesRepository
 
@@ -45,9 +45,9 @@ class MoviesRepositoryImplTest {
     @Before
     fun setup() {
         //MockitoAnnotations.initMocks(this)
-        moviesPagingSource = mock()
+        remoteMoviesPagingSource = mock()
         moviesLocalPagingSource = mock()
-        moviesRepositoryImpl = MoviesRepositoryImpl(moviesLocalPagingSource, moviesPagingSource)
+        moviesRepositoryImpl = MoviesRepositoryImpl(moviesLocalPagingSource, remoteMoviesPagingSource)
     }
 
     @Test
@@ -71,7 +71,7 @@ class MoviesRepositoryImplTest {
             pageSize = PAGE_SIZE_PAGING_REMOTE_MOVIE,
             enablePlaceholders = false
         ), pagingSourceFactory = {
-            moviesPagingSource
+            remoteMoviesPagingSource
         })
 
 
@@ -79,7 +79,7 @@ class MoviesRepositoryImplTest {
         val movies = moviesList.movies?.toList() ?: emptyList()
         val expected = PagingData.from(movies)
 
-        given(moviesPagingSource.load(loadParam)).willReturn(expected2)
+        given(remoteMoviesPagingSource.load(loadParam)).willReturn(expected2)
 
         given(moviesRepositoryImpl.getPopularMovies()).willReturn(pager)
 

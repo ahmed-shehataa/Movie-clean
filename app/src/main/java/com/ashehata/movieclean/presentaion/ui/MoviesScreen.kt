@@ -66,7 +66,7 @@ fun MoviesScreen(
     Scaffold(
         modifier = Modifier.testTag("movies_screen").semantics {
             testTagsAsResourceId = true
-        },
+        }.background(MaterialTheme.colors.onSecondary),
         topBar = {
             TopBar { type -> movieType = type }
         },
@@ -237,7 +237,7 @@ fun ShowErrorState(loadState: LoadState) {
                 Text(
                     text = stringResource(id = R.string.no_movies),
                     fontSize = 20.sp,
-                    color = MaterialTheme.colors.primary,
+                    color = MaterialTheme.colors.onPrimary,
                 )
             }
         }

@@ -123,7 +123,7 @@ fun CircularProgressBar(
         Text(
             text = number.toString(),
             fontSize = fontSize,
-            color = Color.Black,
+            color = MaterialTheme.colors.onPrimary,
         )
     }
 

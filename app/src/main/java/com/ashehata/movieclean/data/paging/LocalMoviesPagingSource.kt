@@ -10,7 +10,7 @@ import java.io.IOException
 
 private const val TAG = "MoviesPagingSource"
 
-class MoviesLocalPagingSource(
+class LocalMoviesPagingSource(
     private val moviesDao: MoviesDao,
     private val firstPage: Int = INITIAL_PAGE,
 ) : PagingSource<Int, MovieLocal>() {

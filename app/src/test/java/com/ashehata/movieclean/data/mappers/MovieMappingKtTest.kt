@@ -2,6 +2,7 @@ package com.ashehata.movieclean.data.mappers
 
 import com.ashehata.movieclean.data.mappers.image.Image185
 import com.ashehata.movieclean.data.mappers.image.Image780
+import com.ashehata.movieclean.data.mappers.movie.toMovie
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
 import com.ashehata.movieclean.domain.models.Movie
 import com.google.common.truth.Truth.assertThat

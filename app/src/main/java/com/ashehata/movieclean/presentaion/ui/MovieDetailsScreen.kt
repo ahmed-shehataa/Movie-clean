@@ -2,9 +2,11 @@ package com.ashehata.movieclean.presentaion.ui
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,7 +29,10 @@ import com.ashehata.movieclean.presentaion.util.compose.CircularProgressBar
 @Preview(showBackground = true)
 fun MovieDetailsScreen(movie: Movie = Movie(id = -1, name = "Dummy", voteAverage = 7.5)) {
     Column(
-        Modifier.testTag("movie_details"), verticalArrangement = Arrangement.spacedBy(4.dp)
+        Modifier
+            .background(MaterialTheme.colors.onSecondary)
+            .testTag("movie_details"),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         val scrollState = rememberScrollState()
         val transition =
@@ -100,7 +105,7 @@ fun KeyValueItem(key: String, name: String, maxLines: Int = Int.MAX_VALUE) {
         Text(
             text = key,
             fontSize = 20.sp,
-            color = Color.Black,
+            color = MaterialTheme.colors.onPrimary,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis
         )
@@ -110,7 +115,7 @@ fun KeyValueItem(key: String, name: String, maxLines: Int = Int.MAX_VALUE) {
             text = name,
             fontStyle = FontStyle.Italic,
             fontSize = 16.sp,
-            color = Color.Black,
+            color = MaterialTheme.colors.onPrimary,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis
         )

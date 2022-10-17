@@ -4,8 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.ashehata.movieclean.data.models.MovieLocal
 import com.ashehata.movieclean.data.models.MoviesRemoteResponse
-import com.ashehata.movieclean.data.paging.MoviesLocalPagingSource
-import com.ashehata.movieclean.data.paging.MoviesPagingSource
+import com.ashehata.movieclean.data.paging.LocalMoviesPagingSource
+import com.ashehata.movieclean.data.paging.RemoteMoviesPagingSource
 import com.ashehata.movieclean.data.paging.MoviesType
 import com.ashehata.movieclean.data.util.PAGE_SIZE_PAGING_LOCAL_MOVIE
 import com.ashehata.movieclean.data.util.PAGE_SIZE_PAGING_REMOTE_MOVIE
@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 
 class MoviesRepositoryImpl @Inject constructor(
-    private val moviesLocalPagingSource: MoviesLocalPagingSource,
-    private val moviesPagingSource: MoviesPagingSource,
+    private val moviesLocalPagingSource: LocalMoviesPagingSource,
+    private val remoteMoviesPagingSource: RemoteMoviesPagingSource,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MoviesRepository {
 
@@ -26,26 +26,26 @@ class MoviesRepositoryImpl @Inject constructor(
     override suspend fun getPopularMovies(): Pager<Int, MoviesRemoteResponse.Movie> =
         withContext(dispatcher) {
             // change movies type
-            moviesPagingSource.setMoviesType(MoviesType.POPULAR)
-            moviesPagingSource.setForceCaching(true)
+            remoteMoviesPagingSource.setMoviesType(MoviesType.POPULAR)
+            remoteMoviesPagingSource.setForceCaching(true)
             // get from API
             return@withContext Pager(config = PagingConfig(
                 pageSize = PAGE_SIZE_PAGING_REMOTE_MOVIE,
                 enablePlaceholders = false
             ), pagingSourceFactory = {
-                moviesPagingSource
+                remoteMoviesPagingSource
             })
         }
 
     override suspend fun getTopRatedMovies(): Pager<Int, MoviesRemoteResponse.Movie> =
         withContext(dispatcher) {
-            moviesPagingSource.setMoviesType(MoviesType.TOP_RATED)
-            moviesPagingSource.setForceCaching(false)
+            remoteMoviesPagingSource.setMoviesType(MoviesType.TOP_RATED)
+            remoteMoviesPagingSource.setForceCaching(false)
             return@withContext Pager(config = PagingConfig(
                 pageSize = PAGE_SIZE_PAGING_REMOTE_MOVIE,
                 enablePlaceholders = false
             ), pagingSourceFactory = {
-                moviesPagingSource
+                remoteMoviesPagingSource
             })
         }
 
